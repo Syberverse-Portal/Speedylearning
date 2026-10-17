@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /console/
+Disallow: /api/
+Allow: /
+Sitemap: https://speedylearning.co.uk/sitemap.xml
