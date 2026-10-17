@@ -1459,6 +1459,7 @@ function showSubjects() {
   button("💬", "What Does This Mean?", "Ask about school words", openChat);
   { const dn = loadJSON(doneKey(), []).length, an = loadJSON(logKey(), []).length; button("📈", "My Progress", an || dn ? `${an} answers · ${dn} finished` : "Stars, scores and practice", showProgress); }
   button("👪", "Parents' Corner", "Worksheets, methods and what's covered", () => showParents());
+  button("🌿", "Home Quest Atlas", "UK-wide real-world mini missions: Learn · Do · Explain", () => { window.location.href = "/quests/"; });
 }
 
 function showDecks(s) {
