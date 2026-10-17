@@ -1,0 +1,19 @@
+{
+  "name": "SpeedyLearning – Kids Learning",
+  "short_name": "SpeedyLearning",
+  "description": "UK primary school activities for Reception to Year 6",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f6fb",
+  "theme_color": "#1f6f43",
+  "lang": "en-GB",
+  "icons": [
+    {
+      "src": "/assets/speedy-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
