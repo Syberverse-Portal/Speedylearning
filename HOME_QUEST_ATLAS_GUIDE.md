@@ -38,3 +38,5 @@ Official references:
 - Northern Ireland: https://www.education-ni.gov.uk/articles/statutory-curriculum
 
 No product can substantiate "better than everything on the market" without measured outcomes, user research and comparable evidence. Distinctiveness here is short home-and-community activities with an explanation/reflection step, explicit UK nation pathways, local-first progress and no streak pressure.
+
+Validation: All new JS parsed successfully before deployment.
