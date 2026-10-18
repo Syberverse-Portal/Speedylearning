@@ -1,0 +1,62 @@
+/* Reference-parity layer: consistent adventure treatment for EVERY activity module. */
+body.speedy-world{background:linear-gradient(180deg,#8fd9ff 0,#dcf6ff 440px,#ecfaff 100%)!important}
+body.speedy-world .speed-homehero{background:radial-gradient(ellipse at 75% 10%,#ffffffa8,transparent 42%),linear-gradient(180deg,#83d7ff 0%,#c4f0ff 78%,#fffaf0)!important}
+body.speedy-world .speed-homehero h2{filter:drop-shadow(0 2px 0 #fff);font-size:clamp(2.7rem,4.7vw,5.35rem)}
+body.speedy-world .speed-play-banner{width:min(1080px,100%);margin:16px auto 20px;padding:20px clamp(18px,3vw,32px);display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:153px;background:linear-gradient(118deg,#ecfaff 0%,#fff6dd 55%,#f6edff 100%);border:4px solid #fff;border-radius:30px;box-shadow:0 12px 30px #2858a02b}
+body.speedy-world .speed-play-banner[hidden]{display:none!important}
+body.speedy-world .speed-play-banner .speed-play-kicker{display:block;color:#2367bc;text-transform:uppercase;letter-spacing:.13em;font-size:.72rem;font-weight:1000}
+body.speedy-world .speed-play-banner h2{font:1000 clamp(1.55rem,4vw,2.4rem)/1.1 "Baloo 2",sans-serif;color:#1243a0;margin:5px 0}
+body.speedy-world .speed-play-banner p{max-width:510px;color:#46639a;font-size:.95rem;font-weight:800;margin:3px 0}
+body.speedy-world .speed-play-banner img{height:128px;width:118px;object-fit:contain;filter:drop-shadow(0 10px 7px #3d5a9f44)}
+body.speedy-world[data-adventure-subject="maths"]{--c:#2683ec;--accent:#2564da;--soft:#e6f5ff}
+body.speedy-world[data-adventure-subject="reading"]{--c:#9056e7;--accent:#8052d7;--soft:#f2eaff}
+body.speedy-world[data-adventure-subject="writing"]{--c:#02aeb9;--accent:#06a3b1;--soft:#e3fbf8}
+body.speedy-world[data-adventure-subject="science"]{--c:#299d68;--accent:#21885e;--soft:#e7f9eb}
+body.speedy-world[data-adventure-subject="games"]{--c:#6d56da;--accent:#6550d0;--soft:#edebff}
+body.speedy-world[data-adventure-subject="progress"]{--c:#dd9c19;--accent:#bb7b0c;--soft:#fff5df}
+body.speedy-world[data-adventure-subject="parents"]{--c:#2f83ae;--accent:#216d9b;--soft:#e7f5ff}
+body.speedy-world .speed-more.subpage{width:min(1100px,100%);margin:0 auto}
+body.speedy-world .speed-more.subpage .speed-more-title{display:none}
+body.speedy-world .speed-more.subpage .cats{max-width:1080px!important;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:15px}
+body.speedy-world .speed-more.subpage .cat{position:relative;min-height:164px;padding:20px 14px 17px;background:linear-gradient(145deg,#fff,#f1f9ff);border:4px solid #fff;border-radius:23px;box-shadow:0 7px 0 #b8d5f1,0 14px 24px #345c9833;color:#1b457e;font-weight:1000;transition:transform .15s,box-shadow .15s}
+body.speedy-world .speed-more.subpage .cat:before{content:"";position:absolute;inset:0 0 auto;height:8px;border-radius:18px 18px 0 0;background:var(--c)}
+body.speedy-world .speed-more.subpage .cat>span{display:grid!important;place-items:center;width:68px;height:68px;margin:3px auto 9px;background:var(--soft);border:2px solid #fff;border-radius:22px;font-size:2.15rem}
+body.speedy-world .speed-more.subpage .cat small{font-size:.79rem;color:#536d91;line-height:1.35;font-weight:800}
+body.speedy-world .speed-more.subpage .cat:hover{transform:translateY(-5px);box-shadow:0 11px 0 #b8d5f1,0 19px 30px #345c9840}
+body.speedy-world #game{max-width:680px;width:100%;margin-inline:auto}
+body.speedy-world #game .bar{max-width:650px}
+body.speedy-world #game .track{max-width:650px}
+body.speedy-world #game .card{width:100%;max-width:650px;min-height:460px;background:linear-gradient(160deg,#fff,#fbfdff);border:5px solid #fff;border-top:9px solid var(--c,#2869d7);border-radius:29px;box-shadow:0 14px 0 #8bb9e066,0 22px 34px #22579c38}
+body.speedy-world #game .opt{background:#f5faff;border:3px solid #dfecff;border-radius:17px;color:#1e4380;box-shadow:0 4px 0 #e4eaf9}
+body.speedy-world #game .opt:hover:not(:disabled){background:#edf6ff;border-color:var(--c,#6a7ed4)}
+body.speedy-world #game .opt.right{background:#defbdd;border-color:#2eab6b;color:#145c3c}
+body.speedy-world #game .opt.wrong{background:#ffe8ea;border-color:#dd536c;color:#9d2443}
+body.speedy-world #game .fb{border:2px solid #fff;border-radius:20px;box-shadow:0 5px 14px #4070ae20}
+body.speedy-world .progress,body.speedy-world .parents,body.speedy-world .writing{width:min(1080px,100%);max-width:1080px}
+body.speedy-world .progress .panel,body.speedy-world .parents .panel,body.speedy-world .writing,body.speedy-world .editor{border:4px solid #fff;border-radius:25px;background:linear-gradient(155deg,#fff,#f9fcff);box-shadow:0 9px 0 #bdddf080,0 15px 30px #3363a52b;color:#183c79;padding:clamp(16px,3vw,24px)}
+body.speedy-world .progress .panel h2,body.speedy-world .parents .panel h2,body.speedy-world .writing h2,body.speedy-world .rules h2{font-family:"Baloo 2","Nunito",sans-serif;color:#18489a}
+body.speedy-world .progress .stat{border-radius:16px;background:linear-gradient(125deg,#e6f4ff,#fff9d9);border:2px solid #fff}
+body.speedy-world .progress .badge{background:#fff0bc;border:2px solid #ffe49c;box-shadow:0 4px 0 #e8cc7b66}
+body.speedy-world .parents .tab,body.speedy-world .parents button,body.speedy-world .writing button{border-radius:15px;min-height:43px}
+body.speedy-world .parents .tab.on{background:var(--c);border-color:var(--c);color:#fff}
+body.speedy-world #mathsWorkbench{background:#f3faff;border:2px solid #b5d8f3;border-radius:20px;padding:12px}
+body.speedy-world #mathsWorkbench .mw-head{border-bottom:2px dashed #bedbf1}
+body.speedy-world #mathsWorkbench button{border-radius:12px}
+body.speedy-world .finish .box{border:5px solid #fff;border-radius:30px;background:linear-gradient(145deg,#fff9df,#fff,#edfbff)}
+body.speedy-world .drawer{background:#e8f7ff;border-left:4px solid #fff}
+body.speedy-world .drawerHead{color:#144888}
+body.speedy-world .chat .msg.bot{background:#fff6dc;color:#25467a}
+body.speedy-world .chat .msg.me{background:#327cd9;color:#fff}
+body.speedy-world .speed-page-footer{color:#2d578c}
+@media(max-width:680px){
+ body.speedy-world .speed-play-banner{padding:13px 15px;min-height:120px;margin:9px auto 12px;gap:7px;border-radius:22px}
+ body.speedy-world .speed-play-banner img{width:79px;height:96px}
+ body.speedy-world .speed-play-banner h2{font-size:clamp(1.3rem,5vw,1.8rem)}
+ body.speedy-world .speed-play-banner p{font-size:.77rem}
+ body.speedy-world .speed-more.subpage .cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ body.speedy-world .speed-more.subpage .cat{padding:13px 7px;min-height:139px}
+ body.speedy-world .speed-more.subpage .cat>span{width:52px;height:52px;font-size:1.7rem}
+ body.speedy-world #game .card{min-height:450px;border-radius:22px;padding:14px}
+}
+@media(prefers-reduced-motion:reduce){body.speedy-world .speed-more.subpage .cat{transition:none!important}}
+@media print{body.speedy-world .speed-play-banner{display:none!important}}
