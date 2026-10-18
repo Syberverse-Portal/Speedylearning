@@ -9,6 +9,22 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "VISIT_COUNTER",
+        "class_name": "VisitCounter"
+      }
+    ]
+  },
+  "exports": {
+    "VisitCounter": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
   }
 }
