@@ -149,7 +149,14 @@ async function d1Summary(env) {
 
 export default {
   async fetch(request, env, ctx) {
-    const path = new URL(request.url).pathname;
+    const url = new URL(request.url);
+    // The www host should always land on the working canonical website.
+    // The Cloudflare www DNS record and Worker custom-domain mapping are required too.
+    if (url.hostname === "www.speedylearning.co.uk") {
+      url.hostname = "speedylearning.co.uk";
+      return Response.redirect(url.toString(), 308);
+    }
+    const path = url.pathname;
     // Never serve backend source code as static pages.
     if (path.startsWith("/functions/") || path.startsWith("/serverlib/") ||
         path === "/schema.sql" || path === "/_worker.js" ||
