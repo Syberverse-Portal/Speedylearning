@@ -12,6 +12,9 @@ on:
       - index.html
       - scripts/build-static.mjs
       - learning-sw.js
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
