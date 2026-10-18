@@ -1935,7 +1935,9 @@ const typed = c => c.kind === "spell" || c.kind === "sum";
 function openForm(placeholder, mode) {
   triesLeft = 3; const inp = $("spellIn");
   inp.value = ""; inp.disabled = false; inp.placeholder = placeholder; inp.inputMode = mode; $("spellGo").disabled = false;
-  $("spellForm").hidden = false; setTimeout(() => inp.focus(), 50);
+  $("spellForm").hidden = false;
+  // Maths has a working pad before the answer: do not auto-scroll past it on phones.
+  setTimeout(() => { if (!$("mathsWorkbench")?.hidden) return; inp.focus(); }, 50);
 }
 const fracVal = s => { s = s.trim(); let m = s.match(/^(-?\d+)\s+(\d+)\/(\d+)$/); if (m) return +m[1] + m[2] / m[3]; m = s.match(/^(-?\d+)\/(\d+)$/); if (m) return m[1] / m[2]; return s !== "" && !isNaN(s) ? +s : null; };
 function isRight(c, guess) {
