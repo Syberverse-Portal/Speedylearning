@@ -40,3 +40,29 @@ jobs:
           test -s dist/games/arcade.js
           test -s dist/games/maths-data.js
           echo "All original game files are ready for Cloudflare Workers."
+
+  browser-integration:
+    name: Play original arcade in desktop and mobile Chromium
+    needs: playable-and-accurate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free browser-test dependencies
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium --with-deps
+      - name: Prepare exact Cloudflare static assets
+        run: node scripts/build-static.mjs
+      - name: Browser-play on desktop and touch mobile
+        run: |
+          python3 -m http.server 8765 --directory dist > /tmp/nova-server.log 2>&1 &
+          sleep 2
+          node tests/nova-browser.cjs
+      - name: Keep game visual-check screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nova-forge-visual-check
+          path: /tmp/nova-*.png
+          if-no-files-found: ignore
