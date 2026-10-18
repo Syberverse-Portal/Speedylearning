@@ -1,0 +1,79 @@
+/* Illustrated home and complete interactive learning journey */
+body.speedy-world .speed-homehero{min-height:540px;background:linear-gradient(135deg,#e9faff88,#9fe4ff44),url('/assets/reference-world-islands.webp') right center/61% auto no-repeat,linear-gradient(155deg,#dbf5ff,#90daff 65%,#bdefff)!important}
+body.speedy-world .speed-world-map .speed-island-picture{content:url('/assets/reference-world-islands.webp');object-fit:contain;width:108%;border-radius:28px;filter:drop-shadow(0 18px 18px #346e9940)}
+body.speedy-world .speed-crew{background:url('/assets/reference-hero-friends.webp') center bottom/contain no-repeat;height:200px;min-height:200px;max-width:550px;width:100%;margin-top:12px}
+body.speedy-world .speed-crew img{display:none!important}
+body.speedy-world .speed-copy{justify-content:center}
+body.speedy-world .speed-subject-card{background-size:cover!important;background-position:center!important;border:4px solid #fff!important;min-height:190px;padding:126px 15px 12px}
+body.speedy-world .speed-subject-card.maths{background-image:linear-gradient(0deg,#2c78d4f2,transparent 54%),url('/assets/reference-card-maths.webp')!important}
+body.speedy-world .speed-subject-card.reading{background-image:linear-gradient(0deg,#803ecff0,transparent 54%),url('/assets/reference-card-reading.webp')!important}
+body.speedy-world .speed-subject-card.writing{background-image:linear-gradient(0deg,#16a9baf0,transparent 54%),url('/assets/reference-card-writing.webp')!important}
+body.speedy-world .speed-subject-card.science{background-image:linear-gradient(0deg,#35b56eeb,transparent 54%),url('/assets/reference-card-science.webp')!important}
+body.speedy-world .speed-subject-card.games{background-image:linear-gradient(0deg,#4746bffa,transparent 54%),url('/assets/reference-card-games.webp')!important}
+body.speedy-world .speed-subject-card>img{display:none!important}
+body.speedy-world .speed-subject-label,body.speedy-world .speed-subject-desc{color:white;text-shadow:0 2px 4px #102a599c}
+body.speedy-world .speed-subject-card.science,body.speedy-world .speed-subject-card.writing{color:#fff}
+body.speedy-world .speed-journey{background:linear-gradient(#fff4d9bf,#fff9e7ee),url('/assets/reference-journey-illustration.webp') center bottom/100% auto no-repeat}
+body.speedy-world .speed-rewards{background:linear-gradient(#f4f0ffb3,#d9efffb8),url('/assets/reference-rewards-illustration.webp') right bottom/85% auto no-repeat}
+body.speedy-world .speed-lower{display:none}
+body.speedy-world .speed-homehero .speed-world-map{overflow:visible}
+.speedy-world .map-hotspot{background:#fffaf2f0;border:2px solid white;box-shadow:0 4px 0 #2584b478;color:#17418e;font-weight:1000}
+.speedy-world .map-hotspot:hover{background:#fff19b}
+.speedy-world .speed-subjects{scroll-margin-top:18px}
+.speedy-world .speed-journey-section{width:min(1440px,100%);margin:22px auto;padding:18px;border:4px solid white;background:linear-gradient(145deg,#f9fbff,#e8f5ff);border-radius:32px;box-shadow:0 15px 36px #2871ab30}
+.sj-heading{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.sj-kicker{font:1000 .73rem "Nunito",sans-serif;letter-spacing:.08em;color:#3770d0}
+.sj-heading h2{font:1000 clamp(1.65rem,3vw,2.8rem)/1 "Baloo 2",system-ui,sans-serif;color:#103b94;margin:8px 0}
+.sj-heading p{color:#4b6591;font-weight:800;margin:5px 0 14px}
+.sj-progress{min-width:170px;max-width:210px;background:white;border:2px solid #d6e8ff;padding:13px 17px;border-radius:19px;display:flex;flex-direction:column;gap:7px;font-weight:900;color:#245099}
+.sj-progress strong{font-size:1.15rem}
+.sj-progress-track{height:11px;background:#d5e8ff;border-radius:50px;overflow:hidden}
+.sj-progress-track span{height:100%;display:block;background:linear-gradient(90deg,#3acb8d,#ffca39);border-radius:50px;transition:width .3s}
+.sj-personalise{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:white;border-radius:18px;padding:10px 14px;margin:8px 0 16px;box-shadow:0 6px 19px #275cae19}
+.sj-personalise label{font-size:.85rem;color:#254a88;font-weight:950}.sj-personalise select{border:2px solid #b9dafc;border-radius:12px;color:#184891;background:#f3faff;padding:7px 12px;margin-left:6px;font:900 .86rem "Nunito",sans-serif}
+.sj-hero-choice{display:flex;align-items:center;flex-wrap:wrap;gap:6px}.sj-hero-choice>span{font-weight:900;color:#31548a;font-size:.83rem;margin-right:3px}
+.sj-avatar{width:44px;height:48px;border:2px solid #d2e5fa;background:#eef8ff;border-radius:13px;cursor:pointer;padding:1px;transition:transform .15s}
+.sj-avatar.selected{background:#ffef9b;border-color:#eeba28;box-shadow:0 0 0 2px #ffde67}
+.sj-avatar img{width:100%;height:100%;object-fit:contain}
+.sj-avatar:hover{transform:translateY(-3px)}
+.sj-map-wrap{width:100%;position:relative;aspect-ratio:1024/585;max-height:670px;border-radius:25px;overflow:hidden;background:linear-gradient(160deg,#92daff,#c4f2ff);border:3px solid #fff}
+.sj-map-image{display:block;width:100%;height:100%;object-fit:cover}
+.sj-map-links{position:absolute;inset:0}
+.sj-map-pin{position:absolute;display:flex;align-items:center;gap:7px;transform:translate(-50%,-50%);border:3px solid #fff;background:#fff9d9ed;padding:7px 12px;border-radius:99px;color:#173f88;font:1000 clamp(.62rem,1.2vw,.91rem) "Nunito",sans-serif;box-shadow:0 5px 0 #2d73a68a;cursor:pointer;white-space:nowrap}
+.sj-map-pin:hover{transform:translate(-50%,-55%);background:#ffe677}
+.sj-map-pin>span{display:grid;place-items:center;background:#327ee1;border-radius:50%;width:27px;height:27px;color:white}
+.sj-map-pin.achieved>span{background:#31b779}
+.sj-pin-maths{left:16%;top:44%}.sj-pin-reading{left:48%;top:27%}.sj-pin-writing{left:82%;top:31%}.sj-pin-science{left:45%;top:69%}.sj-pin-games{left:84%;top:75%}
+.sj-path{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:13px 0}
+.sj-stop{background:#fff;border:2px solid #d9eafa;border-radius:18px;padding:12px 6px;display:flex;align-items:center;flex-direction:column;gap:5px;text-align:center;cursor:pointer;color:#1e427e;min-width:0;min-height:118px}
+.sj-stop:hover{border-color:#7db8f3;background:#f2fbff}.sj-stop.complete{background:#f4ffeb;border-color:#9ce7aa}
+.sj-stop-icon{font-size:1.8rem}.sj-stop strong{font-size:.88rem}.sj-stop small{font-size:.73rem;color:#52739d}
+.sj-finale{display:flex;justify-content:space-between;align-items:center;gap:12px;background:linear-gradient(110deg,#fdf1bc,#fffaf0);border:2px dashed #edcc64;padding:13px 19px;border-radius:21px}
+.sj-finale div{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#314a82}.sj-finale strong{color:#183d89}.sj-finale span{font-size:.85rem}
+.sj-finale button,.sj-big-button{font:1000 .96rem "Nunito",sans-serif;border:0;border-radius:17px;background:linear-gradient(#fff47c,#ffc431);padding:12px 19px;color:#123a85;cursor:pointer;box-shadow:0 4px 0 #e6a121}
+.sj-finale button:hover,.sj-big-button:hover{filter:brightness(1.04);transform:translateY(-2px)}
+.sj-modal-open{overflow:hidden}
+#speedQuestOverlay{position:fixed;inset:0;z-index:2000;display:flex;justify-content:center;align-items:center;padding:15px}
+#speedQuestOverlay[hidden]{display:none}
+.sj-backdrop{position:absolute;inset:0;background:#0e2b6ec9;backdrop-filter:blur(5px)}
+.sj-dialog{position:relative;z-index:2;width:min(610px,100%);max-height:92vh;overflow:auto;background:linear-gradient(140deg,#fffef9,#e8f7ff);border:5px solid white;border-radius:30px;box-shadow:0 26px 70px #07184998;padding:clamp(17px,3vw,30px);outline:none}
+.sj-close{position:absolute;top:9px;right:9px;border:2px solid #c4e1ff;background:white;color:#184795;width:36px;height:36px;border-radius:50%;cursor:pointer;font-weight:900}
+.sj-dialog-hero{display:flex;gap:13px;align-items:center;border-bottom:3px solid var(--island-color,#b3dfff);padding-bottom:12px;padding-right:15px}
+.sj-dialog-hero img{width:90px;height:108px;object-fit:contain}
+.sj-dialog-hero h2{font:1000 clamp(1.6rem,4vw,2.2rem) "Baloo 2",sans-serif;color:#153f96;margin:4px 0}
+.sj-dialog-hero p{margin:0;color:#3c5d92;font-size:.91rem;font-weight:800}
+.sj-quest-progress{margin:16px 0 9px;font-size:.78rem;color:#2970bb;font-weight:950;letter-spacing:.04em;text-transform:uppercase}
+.sj-question{color:#193e83;font:950 clamp(1.12rem,2vw,1.4rem) "Nunito",sans-serif;margin:10px 0 16px}
+.sj-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sj-answer{background:#fff;border:3px solid #c5dffc;color:#193f83;padding:15px 10px;border-radius:17px;font:900 1rem "Nunito",sans-serif;cursor:pointer;min-height:55px}
+.sj-answer:hover:not(:disabled){background:#fff7cd;border-color:#eecb53}.sj-answer.right{background:#d8fbd8;border-color:#5fcb86;color:#19683e}
+.sj-feedback{font-size:.9rem;color:#375f95;font-weight:800;min-height:25px;margin:15px 0}
+.sj-dialog .sj-big-button{display:block;width:100%;margin:10px 0 16px}
+.sj-write-label{display:block;font-weight:900;color:#244b85;margin:14px 0 7px}
+#sjWriting{width:100%;box-sizing:border-box;border:3px solid #b9dbfb;border-radius:17px;background:white;padding:13px;font:800 1rem/1.6 "Nunito",sans-serif;color:#234773;resize:vertical}
+.sj-wordcount{font-size:.82rem;color:#567096;font-weight:800}
+.sj-curriculum-link{display:block;text-align:center;color:#1c5fc4;text-decoration:underline;margin-top:18px;font-size:.85rem;font-weight:800}
+.sj-win{text-align:center}.sj-win h2{color:#164aa5;font:1000 2rem "Baloo 2",sans-serif}.sj-win p{color:#446493;font-weight:800}.sj-win-spark{font-size:2.2rem}.sj-win-mascot{width:100px;height:140px;object-fit:contain;margin:auto}
+@media(max-width:800px){body.speedy-world .speed-homehero{background:linear-gradient(160deg,#f1fdff,#a4e5ff 70%)!important}body.speedy-world .speed-crew{height:130px;min-height:130px}body.speedy-world .speed-world-map .speed-island-picture{width:100%}.sj-heading{align-items:start;flex-direction:column}.sj-progress{max-width:100%;width:100%;box-sizing:border-box}.sj-map-wrap{aspect-ratio:1024/650}.sj-map-pin{font-size:.65rem;padding:5px 7px}.sj-map-pin>span{width:20px;height:20px}.sj-path{grid-template-columns:repeat(3,1fr)}.sj-finale{flex-direction:column;align-items:stretch}.sj-finale button{width:100%}}
+@media(max-width:450px){.sj-pin-maths{left:17%;top:45%}.sj-pin-reading{left:49%;top:30%}.sj-pin-writing{left:80%;top:28%}.sj-pin-science{left:45%;top:70%}.sj-pin-games{left:78%;top:79%}.sj-map-pin b{display:none}.sj-stop{min-height:101px}.sj-stop strong{font-size:.72rem}.sj-stop small{font-size:.65rem}.sj-options{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.sj-progress-track span{transition:none}.sj-avatar{transition:none}}
