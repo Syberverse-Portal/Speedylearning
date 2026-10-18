@@ -29,6 +29,10 @@
   },
   "routes": [
     {
+      "pattern": "speedylearning.co.uk",
+      "custom_domain": true
+    },
+    {
       "pattern": "www.speedylearning.co.uk",
       "custom_domain": true
     }
