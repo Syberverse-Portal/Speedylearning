@@ -184,41 +184,63 @@ function column(){
  box.appendChild(wrapper);
 }
 function gridMultiply(){
- const box=section('Grid multiplication','Write the product of each row and column in its box. Add the partial products in your working below.');
+ const box=section('Grid multiplication','Break each factor into place-value parts. Multiply every row by every column, then add the partial products.');
  const factors=M.gridFactors(current.card.question);
- let rows=factors?.rows||[10,1],cols=factors?.columns||[10,1];
+ const rows=factors?.rows||['',''],cols=factors?.columns||['',''];
+ if(!factors)box.appendChild(el('p','mw-small','Write the two factors as their place-value parts in the blank headings. No example numbers have been inserted into your question.'));
  const table=el('table','mw-grid');
+ const headingCell=(value,key,label)=>{
+  const th=el('th');
+  if(factors)th.textContent=String(value);
+  else {
+   const field=el('input');field.type='text';field.inputMode='numeric';field.maxLength=16;
+   field.value=getField(key);
+   field.setAttribute('aria-label',label);
+   field.placeholder='?';
+   field.oninput=()=>setField(key,field.value);
+   th.appendChild(field);
+  }
+  return th;
+ };
  const head=el('tr');head.appendChild(el('th','','×'));
- for(const c of cols)head.appendChild(el('th','',c));
+ cols.forEach((c,j)=>head.appendChild(headingCell(c,'col'+j,'First factor: part '+(j+1))));
  table.appendChild(head);
  rows.forEach((rv,ri)=>{
-  const tr=el('tr');tr.appendChild(el('th','',rv));
+  const tr=el('tr');tr.appendChild(headingCell(rv,'row'+ri,'Second factor: part '+(ri+1)));
   cols.forEach((cv,ci)=>{
    const td=el('td'),field=el('input');
-   field.type='text';field.inputMode='text';field.maxLength=18;
+   field.type='text';field.inputMode='numeric';field.maxLength=18;
    field.value=getField('grid'+ri+':'+ci);
-   field.setAttribute('aria-label',String(rv)+' times '+String(cv)+' partial product');
+   field.setAttribute('aria-label',factors?String(rv)+' times '+String(cv)+' partial product':'Row '+(ri+1)+' times column '+(ci+1)+' partial product');
    field.oninput=()=>setField('grid'+ri+':'+ci,field.value);
    td.appendChild(field);tr.appendChild(td);
   });table.appendChild(tr);
  });
  box.appendChild(table);
- if(!factors)box.appendChild(el('p','mw-small','The multiplication was not a simple 2- or 3-digit calculation, so this grid is a starting layout. Draw your own grid below if needed.'));
 }
 function arrayModel(){
- const box=section('Arrays and equal groups','Each row represents an equal group. Count in groups rather than counting every dot separately.');
+ const box=section('Arrays and equal groups','Write how many equal groups there are and how many counters each contains. Build the array, then explain the multiplication relationship.');
  const p=M.parseExpression(current.card.question);
- const defaults=p&&p.operator==='×'&&p.left>=1&&p.left<=12&&p.right>=1&&p.right<=12;
- const grid=fieldGrid(box,[['Number of rows','rows',defaults?p.leftText:'4'],['Counters in each row','cols',defaults?p.rightText:'3']]);
- const result=el('div','mw-array');box.appendChild(result);
+ const known=Boolean(p&&p.operator==='×'&&p.left>=1&&p.left<=12&&p.right>=1&&p.right<=12);
+ const grid=fieldGrid(box,[
+  ['Number of rows / groups','rows',known?p.leftText:''],
+  ['Counters in each row','cols',known?p.rightText:'']
+ ]);
+ const result=el('div');box.appendChild(result);
  const controls=[...grid.querySelectorAll('input')];
  const update=()=>{
-  let rows=Math.min(12,Math.max(1,Number(controls[0].value)||1));
-  let cols=Math.min(12,Math.max(1,Number(controls[1].value)||1));
-  result.replaceChildren();result.style.setProperty('--mw-cols',String(cols));
-  for(let n=0;n<rows*cols;n++)result.appendChild(el('span'));
-  result.setAttribute('role','img');
-  result.setAttribute('aria-label',rows+' groups with '+cols+' counters in each group');
+  const a=controls[0].value.trim(),b=controls[1].value.trim();
+  result.replaceChildren();
+  if(!/^\d{1,2}$/.test(a)||!/^\d{1,2}$/.test(b)||Number(a)<1||Number(a)>12||Number(b)<1||Number(b)>12){
+   result.appendChild(el('p','mw-small','Enter one to twelve rows and one to twelve counters per row to build your own array.'));
+   return;
+  }
+  const rows=Number(a),cols=Number(b);
+  const dots=el('div','mw-array');dots.style.setProperty('--mw-cols',String(cols));
+  for(let n=0;n<rows*cols;n++)dots.appendChild(el('span'));
+  dots.setAttribute('role','img');
+  dots.setAttribute('aria-label',rows+' equal groups with '+cols+' counters in each group');
+  result.appendChild(dots);
  };
  for(const control of controls)control.addEventListener('input',update);
  update();
