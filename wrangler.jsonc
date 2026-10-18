@@ -26,5 +26,12 @@
       "type": "durable-object",
       "storage": "sqlite"
     }
-  }
+  },
+  "routes": [
+    {
+      "pattern": "www.speedylearning.co.uk",
+      "custom_domain": true
+    }
+  ],
+  "workers_dev": true
 }
