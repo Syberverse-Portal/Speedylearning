@@ -61,7 +61,7 @@ R=>{const a=R(4,13),b=R(5,15);return task((a*b*10)+" ÷ "+a+" = ?",b*10,"Divisio
 R=>{const a=R(4,12);return task("25% of "+(a*20)+" = ?",a*5,"Percentages of amounts","25% is one quarter. Divide by four.","bar")},
 R=>{const a=R(3,12);return task("Three fifths of "+(a*5)+" = ?",a*3,"Fractions of amounts","Find a fifth, then multiply by three.","fractions")},
 R=>{const a=R(9,19);return task("What is "+a+" squared?",a*a,"Square numbers","Imagine an array with equal rows and columns.","array")},
-R=>{const a=R(1400,5200),b=R(550,1650);return task(a+" − "+b+" = ?",a-b,"Four-digit subtraction","Estimate first then calculate with columns.","column")}
+R=>{const a=R(2400,5200),b=R(550,1650);return task(a+" − "+b+" = ?",a-b,"Four-digit subtraction","Estimate first then calculate with columns.","column")}
 ],
 "Year 6":[
 R=>{const a=R(4,13);return task("35% of "+(a*20)+" = ?",a*7,"Percentages","35% can be 10% + 10% + 10% + 5%.","bar")},
