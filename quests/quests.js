@@ -13,7 +13,7 @@ function storePrefs(){set(prefsKey,prefs)}
 function tier(){return stage().tier}
 function scope(){return E.keyFor('Me',prefs.nation,prefs.stage)}
 function records(){return E.readStore(completed,scope(),D.quests)}
-function answers(){return val('speedy-log|'+(localStorage.getItem('speedy-player')||'Me'),[])}
+function answers(){let name='Me';try{name=localStorage.getItem('speedy-player')||'Me'}catch{}return val('speedy-log|'+name,[])}
 function updateNation(){const n=$('nation');n.replaceChildren();for(const [code,item] of Object.entries(D.sources)){const option=new Option(item.label,code);n.add(option)}n.value=prefs.nation in D.sources?prefs.nation:'en';prefs.nation=n.value;updateStages()}
 function updateStages(){const sel=$('stage');sel.replaceChildren();for(const s of nation().stages)sel.add(new Option(s.name,s.id));if(!nation().stages.some(x=>x.id===prefs.stage))prefs.stage=nation().stages[0].id;sel.value=prefs.stage;storePrefs();$('curriculum').replaceChildren();const anchor=document.createElement('a');anchor.href=nation().url;anchor.target='_blank';anchor.rel='noopener noreferrer';anchor.textContent='Read the official '+nation().name+' guidance ↗';$('curriculum').append('Activities inspired by ',anchor);render()}
 function changeNation(value){prefs.nation=value;prefs.stage=D.sources[value].stages[0].id;updateStages()}
@@ -36,7 +36,7 @@ function report(){
  ...list.map(q=>'- '+q.title+' | '+E.MODES[rec[q.id].mode].label+' | Revisit from '+E.reviewDate(rec[q.id].nextAt)),
  '',
  'This is a self-reflection record, not a certified assessment or proof of mastery. Progress is stored in this browser.'];
- return lines.join('\\n');
+ return lines.join(String.fromCharCode(10));
 }
 function printSummary(){
  const p=$('printBody');p.textContent=report();
