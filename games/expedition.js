@@ -49,6 +49,7 @@ function tone(freq=460,duration=.15,type="triangle"){
 }
 function message(text,seconds=3){
   $("message").textContent=text;
+  $("accessibleFeedback").textContent=text;
   $("message").hidden=false;
   state.messageUntil=state.t+seconds;
 }
@@ -131,6 +132,7 @@ function loadMission(){
   const previous=history().completed;
   state.mission=data.getGameData(year,previous*3+state.level);
   makeWorld();accessibleChoices();updateHUD();
+  $("accessibleQuestion").textContent="RIFT "+(state.level+1)+" OF 3 · "+state.mission.prompt;
   message("Fly into the crystal showing the answer. Watch out for the drones!",3.7);
 }
 function start(){
@@ -167,6 +169,8 @@ function finish(){
   $("completedTotal").textContent=fmt(state.completed);
   message("Three rifts restored! Your maths powered a new constellation.",4);
   updateHUD();tone(1100,.5);
+  // Bring the final achievement into view even for players using buttons below.
+  $("world").scrollIntoView({behavior:motion?"smooth":"instant",block:"start"});
 }
 function doPulse(){
   if(state.mode!=="playing"||state.pulseCooldown>0)return;
