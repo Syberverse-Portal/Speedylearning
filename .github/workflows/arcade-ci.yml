@@ -65,6 +65,15 @@ jobs:
           python3 -m http.server 8765 --directory dist > /tmp/nova-server.log 2>&1 &
           sleep 2
           node tests/nova-browser.cjs
+      - name: Render redesigned homepage, quests and dashboard
+        run: node tests/speedy-preview.cjs
+      - name: Keep redesigned page screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: speedy-site-visual-preview
+          path: /tmp/speedy-preview-*.png
+          if-no-files-found: ignore
       - name: Keep game visual-check screenshots
         uses: actions/upload-artifact@v4
         if: always()
