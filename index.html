@@ -284,6 +284,8 @@
   .ws .line { display:inline-block; min-width:110px; border-bottom:1px solid #333; height:1.1em; vertical-align:bottom; } .ws .line.short { min-width:70px; } .ws .line.long { min-width:240px; }
   .ws .qs li { margin:0 0 14px; line-height:1.5; break-inside:avoid; }
   .ws .opts3 { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:4px; }
+  .ws .wsWork {margin:7px 0 4px;min-height:90px;padding:5px 8px;border:1px solid #a4b1bf;background-color:#fff;background-image:linear-gradient(to right,#dfebf2 1px,transparent 1px),linear-gradient(to bottom,#dfebf2 1px,transparent 1px);background-size:20px 20px;break-inside:avoid}
+  .ws .wsWork small {background:#fff;padding:2px 5px;color:#555}
   .ws .psg { white-space:pre-line; border:1px solid #bbb; border-radius:8px; padding:6px 8px; margin:4px 0; font-size:.9rem; }
   .ws .lscwc { width:100%; border-collapse:collapse; margin-bottom:14px; } .ws .lscwc th, .ws .lscwc td { border:1px solid #888; padding:8px; text-align:left; height:30px; }
   .ws .ans { columns:2; } .ws .foot { color:#777; font-size:.75rem; margin-top:16px; }
@@ -511,6 +513,7 @@
           <button type="button" id="mwUndo">↶ Undo last mark</button>
           <button type="button" id="mwClear">Clear drawing</button>
           <button type="button" id="mwDownload">↓ Save my steps</button>
+          <button type="button" id="mwToAnswer">↓ Enter my final answer</button>
         </div>
         <p id="mwStatus" class="mw-foot" role="status"></p>
         <p class="mw-foot">Different schools may use different methods. Pick the one your teacher uses; this space is for your thinking, and only your final answer is marked.</p>
@@ -2119,6 +2122,7 @@ function showParents(tab = "sheets") {
         <label>Questions<select id="wsCount"><option>10</option><option selected>20</option><option>30</option></select></label>
         <label>Child's name (optional)<input id="wsName" maxlength="30" value="${esc2(player === "Me" ? "" : player)}"></label>
         <label class="check"><input type="checkbox" id="wsAns" checked> Include answers page</label>
+        <label class="check"><input type="checkbox" id="wsWork" checked> Give each maths question squared-paper working space</label>
       </div>
       <div class="edBtns"><button class="btn" id="wsMake" type="button">Make worksheet</button><button class="btn ghost" id="wsPrint" type="button" disabled>🖨️ Print</button></div>
       <div class="sheetPreview" id="wsPreview"></div>`;
@@ -2133,7 +2137,7 @@ function showParents(tab = "sheets") {
       $("wsTopic").disabled = !ts.length;
     };
     $("wsSubj").onchange = fillYears; $("wsYear").onchange = fillTopics; fillYears();
-    $("wsMake").onclick = () => { $("wsPreview").innerHTML = buildSheet($("wsSubj").value, $("wsYear").value, $("wsTopic").value, +$("wsCount").value, $("wsName").value.trim(), $("wsAns").checked); $("wsPrint").disabled = false; };
+    $("wsMake").onclick = () => { $("wsPreview").innerHTML = buildSheet($("wsSubj").value, $("wsYear").value, $("wsTopic").value, +$("wsCount").value, $("wsName").value.trim(), $("wsAns").checked, $("wsWork").checked); $("wsPrint").disabled = false; };
     $("wsPrint").onclick = () => printHTML($("wsPreview").innerHTML);
   } else if (tab === "methods") {
     const groups = ["Reception–Year 1", "Year 1–2", "Year 2–3", "Year 2–6", "Year 3–4", "Year 3–6", "Year 4–5", "Year 4–6", "Year 5–6", "Year 6"];
@@ -2155,20 +2159,22 @@ function sheetCards(s, y, topic, n) {
   if (s === "maths") { const out = []; while (out.length < n) out.push(...mathsDeck(y)); return out.slice(0, n); }
   return shuffle(SUBJECTS[s].decks[y].slice()).slice(0, n);
 }
-function buildSheet(s, y, topic, n, name, withAnswers) {
+function buildSheet(s, y, topic, n, name, withAnswers, withWorking = false) {
   const title = s === "sats" ? `Year 6 SATs practice · ${y}` : `${SUBJECTS[s].title} · ${y}${topic ? " · " + topic : ""}`;
   const cards = sheetCards(s, y, topic, n);
   const head = `<div class="ws"><div class="wsHead"><h1>⚡ Speedy Learning</h1><div>Name: <span class="line">${esc2(name) || "&nbsp;"}</span> Date: <span class="line short"></span></div></div><h2>${esc2(title)}</h2>`;
+  const mathsWorking = withWorking && (s === "maths" || s === "sats" && /Arithmetic|Reasoning|Times Tables/i.test(y));
+  const workingArea = mathsWorking ? `<div class="wsWork" aria-label="Space to show the school calculation method"><small>Show your working using your class method:</small></div>` : "";
   let body = "";
   if (s === "spelling") {
     body = `<p>A grown-up reads each word aloud. Look, say, cover, write, check!</p><table class="lscwc"><tr><th>Word</th><th>Try 1</th><th>Try 2</th><th>Try 3</th></tr>${cards.map(c => `<tr><td>${esc2(c.answer)}</td><td></td><td></td><td></td></tr>`).join("")}</table>
       <h3>Spelling test (fold this half over)</h3><ol class="qs">${cards.map(() => `<li><span class="line long"></span></li>`).join("")}</ol>`;
   } else {
     body = `<ol class="qs">${cards.map(c => {
-      if (c.kind === "quiz") { const opts = shuffle([c.answer, ...c.wrong]); return `<li>${esc2(c.question)}${c.passage ? `<div class="psg">${esc2(c.passage)}</div>` : ""}<div class="opts3">${opts.map((o, k) => `<span>${"abc"[k]}) ${esc2(o)}</span>`).join("")}</div></li>`; }
+      if (c.kind === "quiz") { const opts = shuffle([c.answer, ...c.wrong]); return `<li>${esc2(c.question)}${c.passage ? `<div class="psg">${esc2(c.passage)}</div>` : ""}<div class="opts3">${opts.map((o, k) => `<span>${"abc"[k]}) ${esc2(o)}</span>`).join("")}</div>${workingArea}</li>`; }
       if (c.kind === "spell") return `<li>${esc2((c.clue || "").replace("___", "________"))} <span class="line"></span></li>`;
       const q = c.worded ? c.question : c.question + " =";
-      return `<li>${c.passage ? `<div class="psg">${esc2(c.passage)}</div>` : ""}${esc2(q).replace(/\n/g, "<br>")} <span class="line"></span></li>`;
+      return `<li>${c.passage ? `<div class="psg">${esc2(c.passage)}</div>` : ""}${esc2(q).replace(/\n/g, "<br>")} <span class="line"></span>${workingArea}</li>`;
     }).join("")}</ol>`;
   }
   const answers = withAnswers ? `<div class="pagebreak"></div><h2>Answers · ${esc2(title)}</h2><ol class="ans">${cards.map(c => `<li>${esc2(c.answer)}</li>`).join("")}</ol>` : "";
