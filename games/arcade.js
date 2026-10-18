@@ -14,7 +14,7 @@ const state={
  mode:"intro",paused:false,year:"Year 3",round:0,mission:null,selected:[],
  totalLights:0,completionCount:0,lights:0,flightTime:0,duration:16,
  shipY:.5,shipV:0,shipAim:null,holdingUp:false,holdingDown:false,
- shots:[],particles:[],ts:0,worldTime:0,
+ shots:[],particles:[],ts:0,worldTime:0,padIndex:0,padPrev:{},
  sound:false,calm:false,contrast:false,hints:0,gamepadA:false
 };
 const keyState=new Set();
@@ -147,12 +147,13 @@ function setupMission(same=false){
  if(!same){
   state.mission=Data.getGameData(state.year,state.round);
  }
- state.selected=[];state.hints=0;state.shots=[];
+ state.selected=[];state.hints=0;state.shots=[];state.padIndex=0;
  state.shipY=.5;state.shipV=0;state.shipAim=null;
  $("prompt").textContent=state.mission.prompt;
  $("skill").textContent=state.year.toUpperCase()+" · "+state.mission.skill.toUpperCase();
  $("work").value="";
- $("method").value=state.mission.method;
+ const preferred=read("speedy-nova-class-method",null);
+ $("method").value=[...$("method").options].some(o=>o.value===preferred)?preferred:state.mission.method;
  $("methodHint").textContent=methodText();
  const crystals=$("shards");crystals.replaceChildren();
  state.mission.values.forEach((value,i)=>{
@@ -243,8 +244,7 @@ function updateFlight(dt){
  try{
   const gp=[...(navigator.getGamepads?.()||[])].find(g=>g&&g.connected);
   if(gp){const y=gp.axes?.[1]||0;if(Math.abs(y)>.18)axis=y;
-    if(gp.buttons?.[9]?.pressed&&!state.gamepadA){state.gamepadA=true;togglePause()}
-    else if(!gp.buttons?.[9]?.pressed)state.gamepadA=false;
+
   }
  }catch{}
  if(state.shipAim!==null)axis=clamp((state.shipAim-state.shipY)*7,-1,1);
@@ -269,6 +269,45 @@ function updateFlight(dt){
  }
  $("flightFill").style.width=Math.min(100,100*state.flightTime/state.duration)+"%";
  if(state.flightTime>=state.duration)finishMission();
+}
+function gamepadCursor(index){
+ const options=[...$("shards").children];
+ for(const o of options)o.classList.remove("padfocus");
+ state.padIndex=clamp(index,0,options.length-1);
+ options[state.padIndex]?.classList.add("padfocus");
+}
+function pollGamepad(){
+ let gamepad=null;
+ try{gamepad=[...(navigator.getGamepads?.()||[])].find(g=>g&&g.connected)||null}catch{}
+ if(!gamepad){state.padPrev={};return}
+ const buttons=gamepad.buttons||[];
+ const raw={
+  a:Boolean(buttons[0]?.pressed),b:Boolean(buttons[1]?.pressed),
+  x:Boolean(buttons[2]?.pressed),y:Boolean(buttons[3]?.pressed),
+  start:Boolean(buttons[9]?.pressed),
+  up:Boolean(buttons[12]?.pressed||(gamepad.axes?.[1]||0)<-.68),
+  down:Boolean(buttons[13]?.pressed||(gamepad.axes?.[1]||0)>.68),
+  left:Boolean(buttons[14]?.pressed||(gamepad.axes?.[0]||0)<-.68),
+  right:Boolean(buttons[15]?.pressed||(gamepad.axes?.[0]||0)>.68)
+ };
+ const hit=name=>raw[name]&&!state.padPrev[name];
+ if(state.mode==="forge"){
+  let index=state.padIndex;
+  if(hit("left"))index=index%3===0?index:index-1;
+  if(hit("right"))index=index%3===2?index:index+1;
+  if(hit("up"))index=Math.max(0,index-3);
+  if(hit("down"))index=Math.min(8,index+3);
+  if(index!==state.padIndex)gamepadCursor(index);
+  if(hit("a"))$("shards").children[state.padIndex]?.click();
+  if(hit("b"))$("undo").click();
+  if(hit("x"))ignite();
+  if(hit("y"))$("help").click();
+ }else if(state.mode==="intro"&&hit("a"))$("start").click();
+ else if(state.mode==="victory"){
+  if(hit("a"))$("next").click();
+  else if(hit("b"))$("replay").click();
+ }else if(state.mode==="flight"&&hit("start"))togglePause();
+ state.padPrev=raw;
 }
 function shapeCrystal(x,y,r,hue,selected=false,value=""){
  c.save();c.translate(x,y);
@@ -486,6 +525,7 @@ function frameLoop(t){
  const dt=Math.min(.045,Math.max(0,(t-last)/1000));last=t;
  if(!document.hidden){
   state.worldTime+=state.calm?0:dt;
+  pollGamepad();
   if(state.mode==="flight")updateFlight(dt);
   updateParticles(dt);draw(t,dt);
  }
@@ -597,7 +637,7 @@ function connectControls(){
   }else if(state.mode==="intro"&&event.key==="Enter")$("start").click();
  });
  document.addEventListener("keyup",event=>{keyState.delete(event.key.toLowerCase());keyState.delete(event.key)});
- window.addEventListener("blur",()=>{keyState.clear();state.holdingUp=false;state.holdingDown=false;state.shipAim=null;if(state.mode==="flight")state.paused=true});
+ window.addEventListener("blur",()=>{keyState.clear();state.holdingUp=false;state.holdingDown=false;state.shipAim=null;if(state.mode==="flight"){state.paused=true;$("pause").textContent="▶ Resume";$("pause").setAttribute("aria-pressed","true")}});
  document.addEventListener("visibilitychange",()=>{if(document.hidden&&state.mode==="flight"){state.paused=true;$("pause").textContent="▶ Resume"}});
  window.addEventListener("resize",fit,{passive:true});
 }
