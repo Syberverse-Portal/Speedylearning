@@ -28,6 +28,7 @@ jobs:
         run: |
           node --check games/maths-data.js
           node --check games/arcade.js
+          node --check games/expedition.js
           node --check tests/nova-maths.test.cjs
           node --check tests/nova-interaction.test.cjs
       - name: Run built-in Node tests — no paid dependencies
@@ -37,6 +38,8 @@ jobs:
           node scripts/build-static.mjs
           test -s dist/games/index.html
           test -s dist/games/arcade.css
+          test -s dist/games/expedition.js
+          test -s dist/games/expedition.css
           test -s dist/games/arcade.js
           test -s dist/games/maths-data.js
           echo "All original game files are ready for Cloudflare Workers."
