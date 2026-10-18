@@ -29,6 +29,7 @@ const publicFiles = [
   "assets/mascot-scribble.svg",
   "assets/mascot-scout.svg",
   "assets/mascot-spark.svg",
+  "assets/speedy-island-map.svg",
   "console/index.html",
   "console/sw.js",
   "quests/index.html",
