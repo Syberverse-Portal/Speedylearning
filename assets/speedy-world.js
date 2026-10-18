@@ -98,9 +98,10 @@
     if(/parents|worksheets|method|grown-up/.test(l))return ['dash','For Grown-ups','Helpful worksheets, learning methods and progress information.','parents'];
     return ['dash','Your Learning Adventure','Explore, practise and learn something new today.','learning'];
   }
+  const adventure=create('section','speed-journey-section');adventure.id='speedJourneyApp';lower.after(adventure);const questLayer=document.createElement('div');questLayer.id='speedQuestOverlay';questLayer.hidden=true;document.body.appendChild(questLayer);
   const more=create('section','speed-more');
   more.innerHTML='<div class="speed-more-title"><div><h2 id="speedMoreHeading">Even more to explore!</h2><p id="speedMoreDescription">Animals, flags, books, spelling, SATs and activities for every curious mind.</p></div><button type="button" class="speed-how" id="speedHow" aria-controls="rules" aria-expanded="false">❔ How to play</button></div>';
-  lower.after(more); more.append(menu);more.after(rules);
+  adventure.after(more); more.append(menu);more.after(rules);
   function find(tileName){
    const titles={Maths:/^Maths/i,Reading:/Story Time/i,Writing:/Writing Workshop|^Writing/i,Progress:/My Progress/i,Parents:/Parents' Corner/i};
    const query=titles[tileName]||new RegExp(tileName,'i');
@@ -125,7 +126,7 @@
     const activeWriting=document.getElementById('writing')?.hidden===false;
     const activeEditor=document.getElementById('editor')?.hidden===false;
     const atHome=!menu.hidden&&top.hidden&&!activeGame&&!activeProgress&&!activeParents&&!activeWriting&&!activeEditor;
-    setHidden(hero,!atHome);setHidden(modules,!atHome);setHidden(lower,!atHome);
+    setHidden(hero,!atHome);setHidden(modules,!atHome);setHidden(lower,!atHome);setHidden(adventure,!atHome);
     setHidden(how,!atHome);setHidden(banner,atHome);
     more.classList.toggle('subpage',!atHome);
     const headline=document.getElementById('speedMoreHeading');

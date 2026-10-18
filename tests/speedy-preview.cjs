@@ -19,6 +19,22 @@ async function run(){
      assert.equal(response.status(),200,'Site route '+x.path+' responds successfully');
      await page.locator(x.wait).waitFor({state:'visible',timeout:25000});
      if(x.path==='/'){
+       await page.locator('#speedJourneyApp .sj-map-pin').first().waitFor({state:'visible',timeout:15000});
+       const illustration=await page.evaluate(async()=>{const img=document.querySelector('.sj-map-image');await img.decode();return img.naturalWidth});
+       assert.ok(illustration>500,'Approved map artwork loads');
+       const moduleArt=await page.evaluate(()=>getComputedStyle(document.querySelector('.speed-subject-card.maths')).backgroundImage);
+       assert.ok(moduleArt.includes('reference-card-maths'),'Homepage subject cards use illustrated artwork');
+       await page.locator('#speedJourneyApp .sj-pin-maths').click();
+       await page.locator('#speedQuestOverlay .sj-answer').first().waitFor();
+       for(let i=0;i<2;i++){await page.locator('#speedQuestOverlay .sj-answer').first().click();await page.locator('#speedQuestOverlay .sj-big-button').first().click()}
+       assert.match(await page.locator('#sjWinTitle').innerText(),/star earned/i);
+       await page.locator('#sjBack').click();
+       assert.match(await page.locator('.sj-progress strong').innerText(),/1 stars/);
+       await page.reload({waitUntil:'domcontentloaded'});
+       await page.locator('#speedJourneyApp .sj-map-pin').first().waitFor();
+       assert.match(await page.locator('.sj-progress strong').innerText(),/1 stars/);
+       await page.waitForTimeout(200);
+
        await page.waitForFunction(()=>document.querySelectorAll('#menu .cat').length>=4,{timeout:18000}).catch(()=>{});
        await page.waitForTimeout(1100);
      }else{
