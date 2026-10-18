@@ -198,7 +198,8 @@ function ignite(){
  announce("Perfect energy balance! Launching your lightship…",true);
  sequence();burst(cssW*.5,cssH*.5,col(0),42);
  $("ignite").disabled=true;
- setTimeout(()=>{if(state.mode==="forge")beginFlight()},670);
+ const launchingRift=state.mission.id;
+ setTimeout(()=>{if(state.mode==="forge"&&state.mission?.id===launchingRift)beginFlight()},670);
 }
 function buildFlight(){
  const positions=[.46,.32,.64,.41,.7,.27,.56,.38,.74,.51];
@@ -638,7 +639,7 @@ function connectControls(){
  });
  document.addEventListener("keyup",event=>{keyState.delete(event.key.toLowerCase());keyState.delete(event.key)});
  window.addEventListener("blur",()=>{keyState.clear();state.holdingUp=false;state.holdingDown=false;state.shipAim=null;if(state.mode==="flight"){state.paused=true;$("pause").textContent="▶ Resume";$("pause").setAttribute("aria-pressed","true")}});
- document.addEventListener("visibilitychange",()=>{if(document.hidden&&state.mode==="flight"){state.paused=true;$("pause").textContent="▶ Resume"}});
+ document.addEventListener("visibilitychange",()=>{if(document.hidden&&state.mode==="flight"){state.paused=true;$("pause").textContent="▶ Resume";$("pause").setAttribute("aria-pressed","true")}});
  window.addEventListener("resize",fit,{passive:true});
 }
 restoreSettings();optionsForYear();connectControls();initYear(state.year);fit();
