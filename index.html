@@ -326,6 +326,12 @@
   .rules h2, .panel h2 { font-family:var(--display); }
   .topbar .btn { margin-right:6px; }
   #game { max-width:520px; }
+  /* Keep school-style working between the question and the final-answer controls. */
+  #card:has(#mathsWorkbench:not([hidden])) #mathsWorkbench {order:2}
+  #card:has(#mathsWorkbench:not([hidden])) .opts,
+  #card:has(#mathsWorkbench:not([hidden])) .spellForm,
+  #card:has(#mathsWorkbench:not([hidden])) .tries {order:4}
+  #card:has(#mathsWorkbench:not([hidden])) .fb {order:6}
   .bar { max-width:440px; color:var(--ink); }
   .pill { display:inline-block; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:3px 10px; font-weight:800; font-size:.9rem; font-variant-numeric:tabular-nums; }
   .pill.good { color:var(--good); } .pill.bad { color:var(--bad); }
@@ -384,6 +390,9 @@
 <link rel="icon" type="image/svg+xml" href="/assets/speedy-icon.svg">
 <script src="/visit-tracker.js" defer></script>
 <script src="/speedy-plus.js" defer></script>
+<link rel="stylesheet" href="/maths-workspace.css">
+<script src="/maths-methods.js" defer></script>
+<script src="/maths-workspace.js" defer></script>
 </head>
 <body>
 <button class="mute" id="mute" type="button" aria-label="Sound effects on or off">🔊</button>
@@ -481,6 +490,32 @@
     <button class="speak" id="speak" hidden aria-label="Hear the word">🔊</button>
     <div class="clue" id="clue" hidden></div>
     <div class="name" id="name"></div>
+    <section id="mathsWorkbench" class="mw" hidden aria-label="Show your maths working">
+      <div class="mw-head">
+        <h3>✏️ My maths working</h3>
+        <button type="button" id="mwToggle" aria-expanded="false" aria-controls="mwContent">✏️ Show my working ▾</button>
+      </div>
+      <div id="mwContent" class="mw-content" hidden>
+        <p class="mw-intro">Use the <strong>method you're learning in class</strong>. Choose your layout, write or draw each step, then type your final answer below as usual.</p>
+        <label for="mwMethod">The method we're using at school</label>
+        <select id="mwMethod"></select>
+        <p id="mwHint" class="mw-hint"></p>
+        <button type="button" class="mw-example-button" id="mwExampleButton" aria-expanded="false" aria-controls="mwExample">💡 Explain this method with a different example</button>
+        <p id="mwExample" class="mw-explanation" hidden></p>
+        <div id="mwStructure"></div>
+        <label for="mwNotes">My calculations and steps (typing is optional)</label>
+        <textarea id="mwNotes" rows="3" maxlength="5000" placeholder="Write your number sentences, show your working or explain why a step makes sense."></textarea>
+        <label for="mwCanvas">My squared paper — draw with a finger, pen or mouse</label>
+        <canvas id="mwCanvas" class="mw-paper" width="400" height="225" role="img" aria-label="Draw your working with touch or mouse. For keyboard access, type in the steps box above."></canvas>
+        <div class="mw-tools">
+          <button type="button" id="mwUndo">↶ Undo last mark</button>
+          <button type="button" id="mwClear">Clear drawing</button>
+          <button type="button" id="mwDownload">↓ Save my steps</button>
+        </div>
+        <p id="mwStatus" class="mw-foot" role="status"></p>
+        <p class="mw-foot">Different schools may use different methods. Pick the one your teacher uses; this space is for your thinking, and only your final answer is marked.</p>
+      </div>
+    </section>
     <form class="spellForm" id="spellForm" hidden autocomplete="off">
       <label for="spellIn" class="sr">Type the word</label>
       <input id="spellIn" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Type the word">
@@ -1766,6 +1801,7 @@ async function loadImages(from) {
 let deckName = "";
 function start(name) { deckName = name; return begin(deckFor(subject, name)); }
 async function begin(cards) {
+  if (window.SpeedyMathsWorkspace) window.SpeedyMathsWorkspace.newDeck();
   results = []; document.documentElement.style.setProperty("--c", SUBJECT_TINT[subject] || "#6c5ce7");
   deck = subject === "sats" && deckName === "Reading" || subject === "comprehension" && deckName !== "Mixed" ? cards : shuffle(cards); i = 0; score = 0; streak = 0; finishing = false; mistakes = []; stopTimers();
   if (subject === "sats" && SATS_INFO[deckName] && SATS_INFO[deckName][2]) startExamTimer(SATS_INFO[deckName][2]);
@@ -1860,6 +1896,7 @@ async function show() {
   $("hint").textContent = c.kind === "spell" ? "Type the word and press Check. Tap 🔊 to hear it again" : c.kind === "sum" ? (c.tries === 1 ? "Type your answer and press Check. One try, like the real test" : "Type your answer and press Check. You have 3 tries") : c.kind === "story" ? "Press 📺 to watch it like a cartoon, or tap the card to read it yourself" : c.kind === "quiz" ? "" : "Tap the card to reveal the answer";
   const card = $("card"); card.classList.remove("pop"); void card.offsetWidth; card.classList.add("pop");
   ready = true;
+  if (window.SpeedyMathsWorkspace) window.SpeedyMathsWorkspace.show({card:c,subject,deckName,year});
   if (autoRead && c.kind !== "spell" && c.kind !== "story") setTimeout(() => { if (deck[i] === c && !revealed) readCard(); }, 400);
   const next = deck[i + 1];
   if (next && next.kind === "photo" && images[next.title]) new Image().src = images[next.title];
