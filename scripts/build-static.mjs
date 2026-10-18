@@ -28,7 +28,9 @@ const publicFiles = [
   "games/index.html",
   "games/maths-data.js",
   "games/arcade.js",
-  "games/arcade.css"
+  "games/arcade.css",
+  "games/expedition.js",
+  "games/expedition.css"
 ];
 
 rmSync(output, { recursive: true, force: true });
