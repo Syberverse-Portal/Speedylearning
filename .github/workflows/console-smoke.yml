@@ -1,0 +1,67 @@
+name: Verify visitor console
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/console-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  anonymous-visit-smoke:
+    name: Record and read anonymous visit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify production storage, record one synthetic visit and confirm statistics
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://speedylearning.co.uk"
+          echo "Testing SpeedyLearning visitor counter"
+
+          for attempt in {1..12}; do
+            health="$(curl --max-time 12 -fsS "$url/api/worker-health" || true)"
+            if echo "$health" | jq -e '.databaseConfigured == true and .visitStorage == "durable-object"' >/dev/null 2>&1; then
+              echo "Cloudflare visitor storage connected."
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "Visitor storage is not ready after repeated checks."
+              exit 1
+            fi
+            sleep 10
+          done
+
+          before="$(curl --max-time 12 -fsS "$url/api/public-visit-summary" | jq -r '.total')"
+          if ! [[ "$before" =~ ^[0-9]+$ ]]; then
+            echo "Invalid starting count: $before"
+            exit 1
+          fi
+          echo "Recorded before test: $before"
+
+          code="$(curl --max-time 12 -sS -o /dev/null -w '%{http_code}' \
+            -X POST "$url/api/visit" \
+            -H 'Origin: https://speedylearning.co.uk' \
+            -H 'Sec-Fetch-Site: same-origin' \
+            -H 'Content-Type: text/plain' \
+            --data-raw 'visit')"
+          if [ "$code" != 204 ]; then
+            echo "Expected HTTP 204 from visitor recording; received $code"
+            exit 1
+          fi
+
+          for attempt in {1..10}; do
+            after="$(curl --max-time 12 -fsS "$url/api/public-visit-summary" | jq -r '.total')"
+            if [[ "$after" =~ ^[0-9]+$ ]] && (( after > before )); then
+              echo "SUCCESS: total rose from $before to $after"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "The visitor count did not increase after HTTP 204."
+          exit 1
