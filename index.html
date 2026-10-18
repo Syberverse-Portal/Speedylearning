@@ -425,6 +425,7 @@
     <div><span>1</span>Pick a subject and your year</div>
     <div><span>2</span>Answer the question</div>
     <div><span>3</span>See if you're right, then press Next</div>
+    <div><span>4</span>Click the 💬 speech bubble at the top of the page to get extra help with your questions</div>
   </div>
   <details class="more"><summary>More help for grown-ups</summary>
     <p>🔊 on any card reads it aloud. 🗣️ at the top reads every question automatically, for children who can't read yet.</p>
@@ -1929,7 +1930,7 @@ let autoRead = store.get("speedy-autoread") === "1";
 const showAuto = () => { $("autoRead").classList.toggle("on", autoRead); $("autoRead").setAttribute("aria-pressed", autoRead); };
 showAuto();
 $("autoRead").onclick = () => { autoRead = !autoRead; store.set("speedy-autoread", autoRead ? "1" : "0"); showAuto(); say(autoRead ? "I will read every question out loud." : "Reading out loud is off."); };
-$("readRules").onclick = () => say("How to play. One: pick a subject and your year. Two: answer the question. Three: see if you're right, then press Next.");
+$("readRules").onclick = () => say("How to play. One: pick a subject and your year. Two: answer the question. Three: see if you're right, then press Next. Four: click the speech bubble at the top of the page to get extra help with your questions.");
 $("speak").onclick = e => { e.stopPropagation(); const c = deck[i]; say(c.sentence ? `${c.answer}. ${c.sentence}. ${c.answer}.` : c.answer); };
 const typed = c => c.kind === "spell" || c.kind === "sum";
 function openForm(placeholder, mode) {
