@@ -23,7 +23,9 @@ async function run(){
        const illustration=await page.evaluate(async()=>{const img=document.querySelector('.sj-map-image');await img.decode();return img.naturalWidth});
        assert.ok(illustration>500,'Approved map artwork loads');
        const moduleArt=await page.evaluate(()=>getComputedStyle(document.querySelector('.speed-subject-card.maths')).backgroundImage);
-       assert.ok(moduleArt.includes('reference-card-maths'),'Homepage subject cards use illustrated artwork');
+       assert.ok(moduleArt.includes('linear-gradient'),'Homepage subject cards use designed colour surfaces');
+       const mascotArt=await page.evaluate(()=>getComputedStyle(document.querySelector('.speed-subject-card.maths img')).content);
+       assert.ok(mascotArt.includes('mascot-maths-clean.webp'),'Maths subject card uses cropped mascot art');
        await page.locator('#speedJourneyApp .sj-pin-maths').click();
        await page.locator('#speedQuestOverlay .sj-answer').first().waitFor();
        for(let i=0;i<2;i++){await page.locator('#speedQuestOverlay .sj-answer').first().click();await page.locator('#speedQuestOverlay .sj-big-button').first().click()}
