@@ -177,3 +177,31 @@ button:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible
 }
 body.high-contrast{--ink:#fff;--dim:#e3e7f5;--electric:#88ffdd;--line:#d1e0ff}
 body.high-contrast .module,body.high-contrast .panel{background:#050b1e}
+
+/* Mission interface lives inside the graphical game world so children
+   never have to choose between viewing gameplay and doing maths. */
+.stage-hud .helpbubble{pointer-events:auto;min-width:47px;min-height:46px;
+ border:1px solid #b0feff8c;border-radius:16px;
+ background:linear-gradient(135deg,#247caa,#43339d);font-size:1.4rem;
+ color:#fff;box-shadow:0 5px 22px #44dafb74;cursor:pointer}
+.stage-hud .helpbubble:hover{filter:brightness(1.2);transform:translateY(-2px)}
+.stage-brief,.pilot-brief{position:absolute;z-index:4;bottom:clamp(10px,2vw,22px);
+ left:clamp(12px,2.4vw,30px);max-width:min(670px,calc(100% - 24px));
+ padding:clamp(10px,1.4vw,17px) clamp(13px,1.9vw,23px);
+ background:linear-gradient(125deg,#071831e5,#161d4bd9);
+ border:1px solid #73cdfb8c;border-radius:15px;backdrop-filter:blur(12px);
+ box-shadow:0 8px 25px #0007,0 0 18px #22e8c522;
+ pointer-events:none}
+.stage-brief>span{display:block;color:#77ffe1;font-size:.65rem;font-weight:950;letter-spacing:.19em}
+.stage-brief>strong{display:block;font-weight:950;font-size:clamp(1rem,1.8vw,1.5rem);
+ line-height:1.25;color:#fff;max-width:600px;letter-spacing:-.014em;margin:4px 0}
+.stage-brief>small,.pilot-brief>small{display:block;color:#c3dcf5;font-size:clamp(.68rem,.92vw,.82rem)}
+.pilot-brief>strong{font-weight:950;color:#8cf6f4;display:block;letter-spacing:.11em;font-size:.74rem}
+@media(max-width:580px){
+ .stage-hud{gap:5px}.stage-hud .helpbubble{min-width:42px;min-height:42px;border-radius:11px;font-size:1.15rem}
+ .stage-brief{bottom:8px;left:9px;max-width:calc(100% - 18px);padding:9px 12px}
+ .stage-brief>strong{font-size:.94rem;line-height:1.22}
+ .stage-brief>span{font-size:.59rem}
+ .stage-brief>small{font-size:.66rem}
+ .pilot-brief{bottom:8px;left:9px;padding:10px 12px}
+}
