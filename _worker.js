@@ -149,14 +149,10 @@ async function d1Summary(env) {
 
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-    // The www host should always land on the working canonical website.
-    // The Cloudflare www DNS record and Worker custom-domain mapping are required too.
-    if (url.hostname === "www.speedylearning.co.uk") {
-      url.hostname = "speedylearning.co.uk";
-      return Response.redirect(url.toString(), 308);
-    }
-    const path = url.pathname;
+    // Serve API requests from the same hostname as each child-facing site page.
+    // Both www and root are attached to this Worker through custom domains.
+    // Redirecting only API paths would break anonymous visit tracking via CORS.
+    const path = new URL(request.url).pathname;
     // Never serve backend source code as static pages.
     if (path.startsWith("/functions/") || path.startsWith("/serverlib/") ||
         path === "/schema.sql" || path === "/_worker.js" ||
