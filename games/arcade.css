@@ -108,6 +108,7 @@ button:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible
 .shard:hover{transform:translateY(-4px);box-shadow:0 8px 30px #29b1f877}
 .shard.selected{background:linear-gradient(150deg,#1a8f9d,#17517d 60%,#0e2b5e);
  border-color:#6effe7;box-shadow:0 0 22px #27fce26b,inset 0 0 30px #49ffe422}
+.shard.padfocus{outline:3px solid #ffe38c;outline-offset:3px;box-shadow:0 0 28px #fff0a56b}
 .shard.selected::after{content:"✓";position:absolute;right:8px;top:4px;
  font-size:.75rem;color:var(--gold)}
 .shard:disabled:not(.selected){opacity:.32;transform:none;cursor:not-allowed}
