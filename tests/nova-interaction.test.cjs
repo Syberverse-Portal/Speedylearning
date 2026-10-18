@@ -26,6 +26,7 @@ class FakeElement {
   getAttribute(k){return this.attrs[k]}
   replaceChildren(...items){this.children.splice(0,this.children.length,...items)}
   appendChild(x){this.children.push(x);return x}
+  append(...items){this.children.push(...items)}
   add(o){this.children.push(o)}
   focus(){}
   setPointerCapture(){}
