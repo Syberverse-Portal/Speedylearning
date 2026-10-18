@@ -20,7 +20,7 @@ const ui={
  method:$('mwMethod'),hint:$('mwHint'),example:$('mwExample'),
  exampleButton:$('mwExampleButton'),stage:$('mwStructure'),
  notes:$('mwNotes'),canvas:$('mwCanvas'),undo:$('mwUndo'),
- clear:$('mwClear'),download:$('mwDownload'),status:$('mwStatus')
+ clear:$('mwClear'),download:$('mwDownload'),toAnswer:$('mwToAnswer'),status:$('mwStatus')
 };
 const prefsPrefix='speedy-class-method:';
 const readPref=(key)=>{
@@ -175,12 +175,12 @@ function column(){
  row('carry','', '',true,false);
  row('first',aligned[0],'',false,false);
  row('second',aligned[1],p.operator,false,false);
- row('result','', '=',true,true);
  if(p.operator==='×'&&Math.abs(p.right)>=10){
   row('partial-one','', '',true,false);
-  row('partial-two','', '+',true,true);
-  box.appendChild(el('p','mw-small','For long multiplication, use the lower two rows for partial products, or choose squared paper for your school layout.'));
+  row('partial-two','', '+',true,false);
+  box.appendChild(el('p','mw-small','For long multiplication, the middle rows are partial products. Put the total in the result row, or draw your class layout below.'));
  }
+ row('result','', '=',true,true);
  box.appendChild(wrapper);
 }
 function gridMultiply(){
@@ -396,6 +396,15 @@ ui.download.addEventListener('click',()=>{
  const url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download='SpeedyLearning-my-maths-working.txt';a.click();
  setTimeout(()=>URL.revokeObjectURL(url),10000);
+});
+ui.toAnswer.addEventListener('click',()=>{
+ const input=document.getElementById('spellIn');
+ const form=document.getElementById('spellForm');
+ const choices=document.getElementById('opts');
+ const target=form&&!form.hidden?input:choices&&!choices.hidden?choices:null;
+ if(!target)return;
+ target.scrollIntoView({behavior:'smooth',block:'center'});
+ if(target===input&&!input.disabled)input.focus({preventScroll:true});
 });
 window.addEventListener('resize',()=>{if(current?.open)requestAnimationFrame(drawPaper)});
 window.SpeedyMathsWorkspace={show,newDeck};
