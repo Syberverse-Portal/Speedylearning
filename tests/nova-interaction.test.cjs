@@ -143,7 +143,7 @@ test('pause freezes game and resume restores it',()=>{
 });
 test('visual options are safe and default sound off',()=>{
   const env=mount();
-  assert.match(env.el('sound').textContent,/off/i);
+  assert.match(html,/id="sound"[^>]*>♫ Sound off/);
   env.el('sound').click();
   assert.match(env.el('sound').textContent,/on/i);
   env.el('calm').click();
