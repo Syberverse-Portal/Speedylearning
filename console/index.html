@@ -1,23 +1,88 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#123d33"><meta name="robots" content="noindex,nofollow"><meta name="speedylearning-console-version" content="password-free-readonly-20261017"><title>SpeedyLearning Console</title><style>
+.state{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700;padding:12px 15px;border-radius:12px;background:#ecf2ed;color:#254e3c;margin:10px 0}
+.state.live{background:#e0f4e9;color:#135839}.state.error{background:#ffebeb;color:#932525}
+.state.warn{background:#fff4d9;color:#6f4b06}
+#refreshNow{margin:9px 0 0}.secondaryNote{font-size:.92rem;color:#687c71;margin:6px 0 0}
 :root{font-family:system-ui,Arial,sans-serif;color:#1d312c;background:#f2f7f4}*{box-sizing:border-box}body{margin:0}header{background:#103e30;color:white;padding:24px 5vw;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}h1{font-size:clamp(1.35rem,4vw,2rem);margin:0}.wrap{max-width:1140px;margin:36px auto;padding:0 20px}.card{background:white;border:1px solid #dce9e0;border-radius:18px;padding:25px;box-shadow:0 6px 20px #123d3310;margin-bottom:22px}.login{max-width:490px;margin:10vh auto}label{display:block;margin:12px 0 6px;font-weight:600}input{font:inherit;padding:14px;border:1px solid #a8b9ae;border-radius:10px;width:100%}button{background:#145c45;color:white;padding:12px 20px;border:0;border-radius:9px;cursor:pointer;font:inherit;font-weight:600;margin:6px 8px 6px 0}button.secondary{background:#e3eee8;color:#173f32}button:disabled{opacity:.5}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:16px}.metric strong{font-size:2.1rem;display:block;margin:10px 0;color:#134a39}.muted{color:#62776c}.pill{background:#daf7e9;color:#17543b;border-radius:25px;padding:8px 14px;font-size:.85rem}#log{width:100%;border-collapse:collapse}td,th{padding:13px 9px;border-bottom:1px solid #edf1ed;text-align:left}#message{color:#a33;font-weight:600}.bars{display:flex;height:145px;align-items:end;gap:4px;margin:25px 0 10px}.bar{background:#4cbb88;border-radius:4px 4px 0 0;flex:1;min-height:2px}a{color:inherit}small{color:#687c71} [hidden]{display:none!important}@media(max-width:600px){header{padding:20px}.wrap{margin:20px auto}}
 </style></head><body><header><h1>⚡ SpeedyLearning <span style="font-weight:400">Console</span></h1><a href="/" target="_blank">Open learning site ↗</a></header><div class="wrap">
-<section class="card"><strong>Temporary open dashboard</strong><p>Read-only visitor statistics. Anyone with the link can view these anonymous counts.</p></section>
-<main id="dashboard"><div class="card"><span class="pill">● Website visit monitoring</span><h2>Visitor overview</h2><p class="muted">Counts are anonymous page openings, including repeat visits, not individual children.</p><div class="metrics"><div class="metric">Total visits<strong id="total">—</strong></div><div class="metric">Last hour<strong id="hour">—</strong></div><div class="metric">Last 24 hours<strong id="day">—</strong></div><div class="metric">Last 7 days<strong id="week">—</strong></div></div></div>
-<div class="card"><h2>Phone notifications</h2><p>Notification settings are locked while password-free viewing is enabled.</p></div>
+<section class="card"><strong>Read-only visitor dashboard</strong><p>Anonymous page openings, including repeat visits. Anyone with this link can view these counts; no children's identities or answers are stored.</p><div id="liveStatus" class="state" role="status" aria-live="polite">Connecting to visit storage…</div><p id="trackingSince" class="secondaryNote"></p><button type="button" class="secondary" id="refreshNow">↻ Refresh statistics</button></section>
+<main id="dashboard"><div class="card"><span class="pill">● Website visit monitoring</span><h2>Visitor overview</h2><p class="muted">Every homepage opening counts as a visit, including repeat visits. Total is the recorded lifetime count; individual visit times are retained for up to 30 days.</p><div class="metrics"><div class="metric">Total visits<strong id="total">—</strong></div><div class="metric">Last hour<strong id="hour">—</strong></div><div class="metric">Last 24 hours<strong id="day">—</strong></div><div class="metric">Last 7 days<strong id="week">—</strong></div></div></div>
+<div class="card"><h2>Phone notifications</h2><p>Phone notifications are currently disabled because the notification service still needs secure setup. Visitor counts will continue working independently.</p></div>
 <div class="card"><h2>Visits by hour <small>(last 24 hours)</small></h2><div class="bars" id="bars"></div></div>
 <div class="card"><h2>Recent website visits</h2><p class="muted">Refreshes every ten seconds while open.</p><table id="log"><thead><tr><th>Event</th><th>Time</th></tr></thead><tbody id="visits"></tbody></table></div><p class="muted" id="updated"></p></main></div>
 <script>
-async function update(){
-  try {
-    const r=await fetch('/api/public-visit-summary',{cache:'no-store'});
-    if(!r.ok)throw Error('Statistics unavailable ('+r.status+')');
-    const d=await r.json();
-    for(const [id,k] of [['total','total'],['hour','lastHour'],['day','last24Hours'],['week','last7Days']])document.getElementById(id).textContent=Number(d[k]||0).toLocaleString();
-    const table=document.getElementById('visits');table.replaceChildren();
-    for(const v of(d.recent||[])){const tr=table.insertRow();tr.insertCell().textContent='Website opened';tr.insertCell().textContent=new Date(v.time).toLocaleString('en-GB');}
-    const bars=document.getElementById('bars');bars.replaceChildren();const m=Math.max(1,...(d.hourly||[]).map(v=>v.visits));for(const v of(d.hourly||[])){const e=document.createElement('div');e.className='bar';e.style.height=((v.visits||0)*100/m)+'%';e.title=v.visits+' visits';bars.appendChild(e);}
-    document.getElementById('updated').textContent='Updated '+new Date(d.updatedAt).toLocaleString('en-GB');
-  }catch(e){document.getElementById('updated').textContent=e.message+' — Cloudflare database setup may be required.'}
+let loading = false;
+function setStatus(message, kind = '') {
+  const element = document.getElementById('liveStatus');
+  element.textContent = message;
+  element.className = 'state' + (kind ? ' ' + kind : '');
 }
-update();setInterval(update,10000);
+async function update() {
+  if (loading) return;
+  loading = true;
+  document.getElementById('refreshNow').disabled = true;
+  try {
+    const response = await fetch('/api/public-visit-summary', { cache: 'no-store' });
+    if (!response.ok) {
+      if (response.status === 503) throw Error('Visitor storage is not available yet (503)');
+      throw Error('Statistics request failed (' + response.status + ')');
+    }
+    const data = await response.json();
+    for (const [id, key] of [['total', 'total'], ['hour', 'lastHour'],
+      ['day', 'last24Hours'], ['week', 'last7Days']]) {
+      const value = Number(data[key]);
+      document.getElementById(id).textContent =
+        Number.isFinite(value) ? value.toLocaleString('en-GB') : '—';
+    }
+
+    const table = document.getElementById('visits');
+    table.replaceChildren();
+    if (!(data.recent || []).length) {
+      const row = table.insertRow();
+      row.insertCell().textContent = 'No visits recorded yet';
+      row.insertCell().textContent = 'Open the learning site to test it';
+    } else {
+      for (const visit of data.recent || []) {
+        const row = table.insertRow();
+        row.insertCell().textContent = 'Website opened';
+        row.insertCell().textContent =
+          new Date(visit.time).toLocaleString('en-GB');
+      }
+    }
+
+    const chart = document.getElementById('bars');
+    chart.replaceChildren();
+    const hourly = Array.isArray(data.hourly) ? data.hourly : [];
+    const maximum = Math.max(1, ...hourly.map(point => point.visits || 0));
+    for (const point of hourly) {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = Math.max(2, (Number(point.visits) || 0) * 100 / maximum) + '%';
+      bar.title = (Number(point.visits) || 0) + ' visits';
+      bar.setAttribute('aria-label',bar.title);
+      chart.appendChild(bar);
+    }
+    if (data.trackingSince) {
+      document.getElementById('trackingSince').textContent =
+        'Recording began ' + new Date(data.trackingSince).toLocaleString('en-GB') +
+        '. Earlier visits cannot be recovered.';
+    } else {
+      document.getElementById('trackingSince').textContent =
+        'Counts begin when Cloudflare visitor storage is activated.';
+    }
+    document.getElementById('updated').textContent =
+      'Updated ' + new Date(data.updatedAt || Date.now()).toLocaleString('en-GB');
+    setStatus('● Visit counter connected — updating every 10 seconds', 'live');
+  } catch (error) {
+    setStatus('● Visitor counter not connected — ' + error.message, 'error');
+    document.getElementById('updated').textContent =
+      'The website is still available. Check the latest Cloudflare Worker deployment if this continues.';
+  } finally {
+    loading = false;
+    document.getElementById('refreshNow').disabled = false;
+  }
+}
+document.getElementById('refreshNow').addEventListener('click', update);
+update();
+setInterval(update, 10000);
 </script></body></html>
