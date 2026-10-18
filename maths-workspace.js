@@ -20,7 +20,7 @@ const ui={
  method:$('mwMethod'),hint:$('mwHint'),example:$('mwExample'),
  exampleButton:$('mwExampleButton'),stage:$('mwStructure'),
  notes:$('mwNotes'),canvas:$('mwCanvas'),undo:$('mwUndo'),
- clear:$('mwClear'),download:$('mwDownload'),toAnswer:$('mwToAnswer'),status:$('mwStatus')
+ clear:$('mwClear'),download:$('mwDownload'),picture:$('mwSavePicture'),toAnswer:$('mwToAnswer'),status:$('mwStatus')
 };
 const prefsPrefix='speedy-class-method:';
 const readPref=(key)=>{
@@ -239,14 +239,17 @@ function barModel(){
  grid.appendChild(input('Part / group 1','barpart1'));grid.appendChild(input('Part / group 2','barpart2'));box.appendChild(grid);
 }
 function fractionStrips(){
- const box=section('Fraction strips','Every part in the same strip must be equal. Choose how many equal sections, then shade the amount you want to represent.');
- const chooser=fieldGrid(box,[['Equal parts in each strip (2–12)','denominator',getField('denominator','4')]]);
- const denomInput=chooser.querySelector('input');
+ const box=section('Fraction strips','Shade equal parts to see the structure of fractions. Use different numbers of parts to compare or show equivalence.');
+ const chooser=fieldGrid(box,[
+  ['Top strip equal parts (2–12)','denom0','2'],
+  ['Bottom strip equal parts (2–12)','denom1','4']
+ ]);
+ const controls=[...chooser.querySelectorAll('input')];
  const area=el('div');box.appendChild(area);
  const build=()=>{
-  const parts=Math.max(2,Math.min(12,Math.floor(Number(denomInput.value)||4)));
   area.replaceChildren();
   for(let bar=0;bar<2;bar++){
+   const parts=Math.max(2,Math.min(12,Math.floor(Number(controls[bar].value)||4)));
    area.appendChild(el('strong','mw-small','Strip '+(bar+1)+' — '+parts+' equal parts'));
    const strip=el('div','mw-fractionparts');strip.style.setProperty('--mw-denom',String(parts));
    for(let n=0;n<parts;n++){
@@ -263,7 +266,7 @@ function fractionStrips(){
    }area.appendChild(strip);
   }
  };
- denomInput.addEventListener('input',build);build();
+ controls.forEach(c=>c.addEventListener('input',build));build();
 }
 function stepsOnly(){
  section('Your calculation, step by step','Explain each step in the writing box, or draw a diagram in the squared-paper area. There is no single required layout.');
@@ -299,6 +302,7 @@ function show({card,subject,deckName}){
  if(!canShow){currentCard=null;current=null;ui.panel.hidden=true;return}
  if(!card||typeof card.question!=='string'){currentCard=null;current=null;ui.panel.hidden=true;return}
  currentCard=card;
+ clearArmed=false;ui.clear.textContent='Clear drawing';
  current=deckWork.get(card);
  if(!current){
   const cat=M.category(card.question);
@@ -383,7 +387,15 @@ function finishStroke(){drawing=false;activeStroke=null}
 ui.canvas.addEventListener('pointerup',finishStroke);
 ui.canvas.addEventListener('pointercancel',finishStroke);
 ui.undo.addEventListener('click',()=>{if(current){current.strokes.pop();drawPaper()}});
-ui.clear.addEventListener('click',()=>{if(current){current.strokes=[];drawPaper()}});
+let clearArmed=false;
+ui.clear.addEventListener('click',()=>{
+ if(!current)return;
+ if(!clearArmed){
+  clearArmed=true;ui.clear.textContent='Confirm clear drawing';ui.status.textContent='Press again only if you want to erase all the drawing on this question.';return;
+ }
+ current.strokes=[];drawPaper();clearArmed=false;ui.clear.textContent='Clear drawing';
+ ui.status.textContent='Drawing cleared. Your typed steps and classroom layout are unchanged.';
+});
 ui.download.addEventListener('click',()=>{
  if(!current)return;
  const inputs=Object.entries(current.fields).filter(([k,v])=>v.trim()).map(([k,v])=>k+': '+v).join('\n');
@@ -396,6 +408,16 @@ ui.download.addEventListener('click',()=>{
  const url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download='SpeedyLearning-my-maths-working.txt';a.click();
  setTimeout(()=>URL.revokeObjectURL(url),10000);
+});
+ui.picture.addEventListener('click',()=>{
+ if(!current)return;
+ drawPaper();
+ ui.canvas.toBlob(blob=>{
+  if(!blob){ui.status.textContent='This browser could not save the drawing. You can take a screenshot instead.';return;}
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='SpeedyLearning-maths-working.png';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+ },'image/png');
 });
 ui.toAnswer.addEventListener('click',()=>{
  const input=document.getElementById('spellIn');
