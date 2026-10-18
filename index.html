@@ -1508,6 +1508,7 @@ function showDecks(s) {
   stopReading();
   $("menu").innerHTML = ""; tileN = 0; $("menu").hidden = false; $("game").hidden = true; $("topbar").hidden = false;
   $("sub").textContent = `${S.title}: pick a deck`;
+  if (s === "maths") button("🎮", "NOVA FORGE — ARCADE GAME", "Original console-style maths experience · Reception to Year 6", () => { window.location.href = "/games/?subject=maths"; });
   if (s === "writing") {
     $("sub").textContent = "Writing Workshop: pick your year group";
     for (const band of Object.keys(WRITING)) button({"Years 1–2": "✏️", "Years 3–4": "📝", "Years 5–6": "🖋️"}[band], band, `${AGES[band]} · ${WRITING[band].checks.length} writing skills`, () => openWriting(band));
@@ -1778,6 +1779,7 @@ function showTopics(s, name) {
   $("rules").hidden = true; $("editor").hidden = true; $("progress").hidden = true; $("writing").hidden = true; $("parents").hidden = true;
   $("sub").textContent = `${S.title} · ${name}: pick a topic`;
   button("🎲", `All of ${name}`, AGES[name] || "Every topic mixed", () => start(name));
+  if (s === "maths") button("🎮", "NOVA FORGE · GAMES", "Build your answer · pilot the lightship · " + name, () => { window.location.href = "/games/?subject=maths&stage=" + encodeURIComponent(name); });
   for (const [t, icon, n] of topicsFor(s, name)) {
     button(icon, t, n, () => { deckName = `${name} · ${t}`; begin(topicCards(s, name, t)); });
     const best = store.get(`speedy-best|${s}|${name} · ${t}`);
