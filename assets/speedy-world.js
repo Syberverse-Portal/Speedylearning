@@ -82,6 +82,22 @@
    '<div class="speed-reward-icons" aria-hidden="true"><span>⭐</span><span>👑</span><span>🏅</span><span>💎</span><span>🏆</span></div>'+
    '<button class="speed-rewards-btn" type="button" data-speed-target="Progress">See My Progress ➜</button>';
   const lower=create('div','speed-lower');lower.append(journey,rewards);modules.after(lower);
+  // Contextual adventure title: the same mascots follow children into lessons.
+  const banner=create('section','speed-play-banner');
+  banner.hidden=true; banner.setAttribute('aria-label','Current learning adventure');
+  banner.innerHTML='<div class="speed-play-content"><span class="speed-play-eyebrow">✨ The adventure continues</span><h2 id="speedPlayTitle">Let’s learn something brilliant!</h2><p id="speedPlayDescription">Take your time, try your best and collect those little wins.</p></div><img id="speedPlayMascot" src="'+icon('dash')+'" alt="" loading="lazy">';
+  top.before(banner);
+  const setHidden=(el,v)=>{if(el&&el.hidden!==v)el.hidden=v};
+  function themeFor(label){
+    const l=(label||'').toLowerCase();
+    if(/math|sum|table|numeracy|sats/.test(l))return ['sum','Maths Mountain','Solve, explore and discover! Every question is a step forward.','maths'];
+    if(/read|book|story|spell|vocab|grammar|word|english/.test(l))return ['story','Reading Forest','New words and incredible stories are waiting for you.','reading'];
+    if(/writ|sentence|paragraph/.test(l))return ['scribble','Writing Woods','Let your imagination grow, one sentence at a time.','writing'];
+    if(/animal|flag|world|science|nature/.test(l))return ['scout','Discovery Island','Look closely, ask questions and explore the wonderful world.','science'];
+    if(/progress|badge|score|achievement/.test(l))return ['spark','Your Learning Journey','Look at the skills you have practised and what comes next.','progress'];
+    if(/parents|worksheets|method|grown-up/.test(l))return ['dash','For Grown-ups','Helpful worksheets, learning methods and progress information.','parents'];
+    return ['dash','Your Learning Adventure','Explore, practise and learn something new today.','learning'];
+  }
   const more=create('section','speed-more');
   more.innerHTML='<div class="speed-more-title"><div><h2 id="speedMoreHeading">Even more to explore!</h2><p id="speedMoreDescription">Animals, flags, books, spelling, SATs and activities for every curious mind.</p></div><button type="button" class="speed-how" id="speedHow" aria-controls="rules" aria-expanded="false">❔ How to play</button></div>';
   lower.after(more); more.append(menu);more.after(rules);
@@ -103,15 +119,32 @@
   const how=document.getElementById('speedHow');
   how.addEventListener('click',()=>{howOpen=!howOpen;how.setAttribute('aria-expanded',String(howOpen));rules.hidden=!howOpen;if(howOpen)rules.scrollIntoView({behavior:'smooth',block:'start'})});
   function state(){
-    const atHome=!menu.hidden&&top.hidden&&document.getElementById('game')?.hidden!==false&&document.getElementById('progress')?.hidden!==false&&document.getElementById('parents')?.hidden!==false&&document.getElementById('writing')?.hidden!==false;
-    hero.hidden=!atHome;modules.hidden=!atHome;lower.hidden=!atHome;
-    how.hidden=!atHome;
+    const activeGame=document.getElementById('game')?.hidden===false;
+    const activeProgress=document.getElementById('progress')?.hidden===false;
+    const activeParents=document.getElementById('parents')?.hidden===false;
+    const activeWriting=document.getElementById('writing')?.hidden===false;
+    const activeEditor=document.getElementById('editor')?.hidden===false;
+    const atHome=!menu.hidden&&top.hidden&&!activeGame&&!activeProgress&&!activeParents&&!activeWriting&&!activeEditor;
+    setHidden(hero,!atHome);setHidden(modules,!atHome);setHidden(lower,!atHome);
+    setHidden(how,!atHome);setHidden(banner,atHome);
     more.classList.toggle('subpage',!atHome);
     const headline=document.getElementById('speedMoreHeading');
-    headline.textContent=atHome?'Even more to explore!':(document.getElementById('sub')?.textContent||'Choose an adventure');
-    document.getElementById('speedMoreDescription').hidden=!atHome;
-    if(atHome&&rules.hidden!==!howOpen)rules.hidden=!howOpen;
-    more.hidden=menu.hidden&&!atHome;
+    const sub=(document.getElementById('sub')?.textContent||'').trim();
+    const isProgress=activeProgress,isParents=activeParents;
+    const friendly=themeFor(isProgress?'progress':isParents?'parents':activeWriting?'writing':sub);
+    if(!atHome){
+      const title=isProgress?'My Progress':isParents?"Parents’ Corner":activeWriting?'Writing Workshop':sub.replace(/: pick a deck$/,'').replace(/: pick a paper.*$/,'');
+      document.getElementById('speedPlayTitle').textContent=title||friendly[1];
+      document.getElementById('speedPlayDescription').textContent=friendly[2];
+      const avatar=document.getElementById('speedPlayMascot');
+      const chosen=icon(friendly[0]);
+      if(avatar.getAttribute('src')!==chosen)avatar.setAttribute('src',chosen);
+      document.body.dataset.adventureSubject=friendly[3];
+    }else{delete document.body.dataset.adventureSubject}
+    headline.textContent=atHome?'Even more to explore!':(sub||'Choose an adventure');
+    setHidden(document.getElementById('speedMoreDescription'),!atHome);
+    if(atHome)setHidden(rules,!howOpen);
+    setHidden(more,menu.hidden&&!atHome);
   }
   new MutationObserver(state).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden']});
   state();
