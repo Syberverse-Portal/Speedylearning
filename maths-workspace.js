@@ -1,4 +1,5 @@
 /* SpeedyLearning Maths Working Studio.
+ * Release: word-problem grids use pupil-entered numbers, not invented placeholders.
  * Children can use their school's own layout. No final answers calculated, hints do
  * not reveal the current solution, and workings are never sent to a server.
  * Canvas and notes stay in memory for the current deck, while the preferred method
