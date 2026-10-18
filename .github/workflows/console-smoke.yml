@@ -16,6 +16,38 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Check both root and www domain, plus same-origin visit tracking
+        shell: bash
+        run: |
+          set -euo pipefail
+          for host in speedylearning.co.uk www.speedylearning.co.uk; do
+            ready=0
+            for attempt in {1..12}; do
+              status="$(curl --max-time 12 -sS -o /dev/null -w '%{http_code}' "https://$host/games/" || true)"
+              health="$(curl --max-time 12 -fsS "https://$host/api/worker-health" || true)"
+              if [[ "$status" == "200" ]] && echo "$health" | jq -e '.worker == true and .databaseConfigured == true' >/dev/null 2>&1; then
+                ready=1
+                break
+              fi
+              echo "Waiting for $host: site HTTP $status, storage not confirmed, attempt $attempt"
+              sleep 10
+            done
+            if (( ready != 1 )); then
+              echo "$host failed live DNS, site or API health checks."
+              exit 1
+            fi
+            echo "SUCCESS: $host serves game and working Cloudflare API."
+          done
+          www_visit="$(curl --max-time 12 -sS -o /dev/null -w '%{http_code}' \
+            -X POST 'https://www.speedylearning.co.uk/api/visit' \
+            -H 'Origin: https://www.speedylearning.co.uk' \
+            -H 'Sec-Fetch-Site: same-origin' \
+            -H 'Content-Type: text/plain' --data-raw 'anonymous smoke visit')"
+          if [[ "$www_visit" != "204" ]]; then
+            echo "WWW visitor tracking failed, HTTP $www_visit (expected 204)"
+            exit 1
+          fi
+          echo "SUCCESS: www anonymous visit tracking is functional."
       - name: Verify production storage, record one synthetic visit and confirm statistics
         shell: bash
         run: |
