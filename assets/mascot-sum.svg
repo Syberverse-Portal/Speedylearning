@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 350" role="img" aria-label="Sum, a friendly SpeedyLearning mascot">
+<defs>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFE89B"/><stop offset=".46" stop-color="#FFAD45"/><stop offset="1" stop-color="#F17445"/></linearGradient>
+ <radialGradient id="shine" cx=".32" cy=".12" r=".9"><stop stop-color="white" stop-opacity=".65"/><stop offset=".66" stop-color="white" stop-opacity=".06"/><stop offset="1" stop-color="#0B1A6B" stop-opacity=".1"/></radialGradient>
+ <linearGradient id="stripe" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".88"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+ <clipPath id="shape"><path d="M104 100C92 78 100 52 132 42c-7 21 6 34 29 38 40 7 72 36 82 72 11 43-4 92-41 113-35 21-82 19-116-4C47 235 45 185 63 145c11-21 24-30 41-45z"/></clipPath>
+</defs>
+<ellipse cx="162" cy="327" rx="97" ry="13" fill="#1e4c92" opacity=".13"/>
+<path d="M105 265q-21 11-21 33" stroke="#F17445" stroke-width="21" stroke-linecap="round"/>
+<path d="M203 267q20 9 25 32" stroke="#F17445" stroke-width="21" stroke-linecap="round"/>
+<path d="M74 291c20-1 35 7 38 22 4 16-33 23-64 10-16-6-12-22 0-29z" fill="#fff" stroke="#F17445" stroke-width="7"/>
+<path d="M212 289c24-4 41 3 53 19 10 15-16 26-46 19-24-5-30-14-24-25z" fill="#fff" stroke="#F17445" stroke-width="7"/>
+<path d="M55 313h55m96 0h54" stroke="#FFE89B" stroke-width="5" stroke-linecap="round"/>
+<path d="M76 207q-23 3-33-21" fill="none" stroke="#F17445" stroke-width="18" stroke-linecap="round"/>
+<circle cx="41" cy="183" r="14" fill="#FFE89B" stroke="#F17445" stroke-width="5"/>
+<path d="M235 207q22-2 37-25" fill="none" stroke="#F17445" stroke-width="18" stroke-linecap="round"/>
+<circle cx="274" cy="178" r="14" fill="#FFE89B" stroke="#F17445" stroke-width="5"/>
+<path d="M104 100C92 78 100 52 132 42c-7 21 6 34 29 38 40 7 72 36 82 72 11 43-4 92-41 113-35 21-82 19-116-4C47 235 45 185 63 145c11-21 24-30 41-45z" fill="url(#skin)" stroke="#F17445" stroke-width="6" stroke-linejoin="round"/>
+<g clip-path="url(#shape)">
+ <path d="M37 120C98 79 100 203 161 146S261 145 277 91" fill="none" stroke="url(#stripe)" stroke-width="21" stroke-linecap="round"/>
+ <path d="M22 222C100 178 117 272 213 207 257 176 269 204 292 207" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="15" stroke-linecap="round"/>
+ <path d="M66 128q84-84 164 23" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="11" stroke-linecap="round"/>
+ <path d="M104 100C92 78 100 52 132 42c-7 21 6 34 29 38 40 7 72 36 82 72 11 43-4 92-41 113-35 21-82 19-116-4C47 235 45 185 63 145c11-21 24-30 41-45z" fill="url(#shine)"/>
+</g>
+<path d="M108 151q12-13 30-5M181 146q12-13 29 0" fill="none" stroke="#183454" stroke-width="6" stroke-linecap="round"/>
+<ellipse cx="123" cy="172" rx="20" ry="25" fill="#fff"/><ellipse cx="195" cy="172" rx="20" ry="25" fill="#fff"/>
+<ellipse cx="130" cy="174" rx="11" ry="15" fill="#203A78"/><ellipse cx="199" cy="174" rx="11" ry="15" fill="#203A78"/>
+<circle cx="134" cy="168" r="5" fill="#fff"/><circle cx="203" cy="168" r="5" fill="#fff"/>
+<ellipse cx="94" cy="203" rx="13" ry="7" fill="#ff91a9" opacity=".64"/><ellipse cx="224" cy="203" rx="13" ry="7" fill="#ff91a9" opacity=".64"/>
+<path d="M127 215q34 31 69-3q-3 42-35 44-28 0-34-41z" fill="#772954"/>
+<path d="M140 236q24-13 45 4-14 20-31 11z" fill="#ff88aa"/><path d="M127 215q34 31 69-3" stroke="white" stroke-width="7" fill="none" stroke-linecap="round"/>
+<g><g stroke='#fff' stroke-width='7' stroke-linecap='round'><path d='M115 63h34m-17-17v34M166 47h30m-30 29h30'/></g></g>
+</svg>

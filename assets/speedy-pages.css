@@ -1,0 +1,46 @@
+/* Consistent learning family across Quest Atlas, Nova Forge, privacy and console */
+body:has(.sitehead){background:radial-gradient(ellipse at 16% -8%,#1b3e78 0,transparent 50%),radial-gradient(ellipse at 90% 10%,#263d66 0,transparent 42%),#0b1732}
+body:has(.sitehead) .speed-top{margin:0 auto 8px}
+body:has(.sitehead) .sitehead{max-width:1400px;padding-top:9px;padding-bottom:12px}
+body:has(.sitehead) .sitehead .logo{font-size:.86rem;opacity:.9}
+body:has(.sitehead) .sitehead .logo .gem{background:#2869c8;border-radius:50%}
+body:has(.sitehead) .hero{background:linear-gradient(110deg,#112c59,#183568);border:1px solid #4776af;border-radius:25px;padding:clamp(19px,3vw,28px);margin:11px 0 19px}
+body:has(.sitehead) .hero h1{letter-spacing:-.04em}
+body:has(.sitehead) .hero h1 span{background:linear-gradient(110deg,#8ad9ff,#eabaff);-webkit-background-clip:text;background-clip:text}
+body:has(.sitehead) .arena{border-radius:28px;border:3px solid #7aaefb;box-shadow:0 18px 55px #020817a8,0 0 0 5px #87c4ff1b}
+body:has(.sitehead) .panel{border-radius:24px;border:1px solid #567bb0;background:#132c52}
+body:has(.sitehead) .overlaybox{border-radius:28px;border:2px solid #79baf4;background:#102751f4}
+body:has(.sitehead) .primary{background:linear-gradient(110deg,#92ffdb,#83cfff);color:#123062;border-radius:16px}
+body:has(.sitehead) .questionbox{border-radius:18px}
+body:has(.sitehead) .scoreline .stat{border-radius:14px}
+body:has(.sitehead) .headtools button,body:has(.sitehead) select{border-radius:13px}
+body:has(.sitehead) .footer{color:#bed6fd}
+body:has(.sitehead) .speed-page-footer{color:#b8d7ff}
+body:has(.sitehead) .speed-page-footer a{color:#dbe8ff}
+body:has(#findTitle){--green:#225ecc;--mint:#eaf4ff;--ink:#193965;--soft:#5e7392;--line:#dce8f7;--gold:#ffd65a;background:radial-gradient(ellipse at 85% 0%,#e8f2ff,transparent 48%),#f5f9ff}
+body:has(#findTitle) header:not(.speed-top){background:linear-gradient(125deg,#235fc8,#25aabb);border-radius:0 0 34px 34px}
+body:has(#findTitle) header:not(.speed-top) h1{font-family:"Baloo 2",system-ui,sans-serif;letter-spacing:-.035em}
+body:has(#findTitle) .surface{border:1px solid #dfeaf8;border-radius:25px;box-shadow:0 10px 28px #21509b13}
+body:has(#findTitle) h2{font-family:"Baloo 2",system-ui,sans-serif;color:#1b427b}
+body:has(#findTitle) .step{background:#eaf4ff;border-radius:18px}
+body:has(#findTitle) .quest{border-radius:20px;border:1px solid #e0e9f7;box-shadow:0 8px 20px #1d4e9110}
+body:has(#findTitle) .quest:hover{transform:translateY(-2px);box-shadow:0 15px 25px #1d4e9125}
+body:has(#findTitle) .primary{background:#2869d6;border-radius:14px}
+body:has(#findTitle) .secondary{background:white;border-color:#acc7e8;color:#1f5aaa;border-radius:14px}
+body:has(#findTitle) .pill{background:#eaf3ff}
+body:has(#findTitle) .progress>div{background:linear-gradient(90deg,#2475e9,#33c8ae)}
+body:has(#findTitle) .filters button[aria-pressed=true]{background:#2769cd}
+body:has(#findTitle) .speed-top{margin:12px auto}
+body:has(.wrap #dashboard){background:#f4f8ff;color:#203c69}
+body:has(.wrap #dashboard) header{background:linear-gradient(110deg,#1e4fbb,#199eb8);color:white;border-radius:0 0 30px 30px}
+body:has(.wrap #dashboard) .card{border:1px solid #dfeafa;border-radius:24px;box-shadow:0 12px 28px #17366b12}
+body:has(.wrap #dashboard) .metric strong{color:#255cca}
+body:has(.wrap #dashboard) button{background:#285ec6;border-radius:13px}
+body:has(.wrap #dashboard) .bar{background:linear-gradient(#40bccc,#3074e0)}
+body:has(.wrap #dashboard) .pill{background:#e6f5ff;color:#1e5eaa}
+body:has(.wrap #dashboard) .wrap{max-width:1120px}
+body:has(>h1:first-of-type):not(.speedy-world):not(:has(.sitehead)):not(:has(#findTitle)):not(:has(#dashboard)){background:#f6f9ff;color:#193965}
+body:has(>h1:first-of-type):not(.speedy-world):not(:has(.sitehead)):not(:has(#findTitle)):not(:has(#dashboard)) h1{color:#1d4489}
+body:has(>h1:first-of-type):not(.speedy-world):not(:has(.sitehead)):not(:has(#findTitle)):not(:has(#dashboard)) a{color:#245cbd}
+@media(max-width:650px){body:has(.sitehead) .hero{padding:17px}body:has(.sitehead) .arena{border-radius:20px}body:has(#findTitle) header:not(.speed-top){border-radius:0 0 25px 25px}body:has(.wrap #dashboard) header{border-radius:0 0 22px 22px}}
+@media(prefers-reduced-motion:reduce){body:has(#findTitle) .quest:hover{transform:none}}
