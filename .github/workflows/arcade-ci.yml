@@ -1,0 +1,42 @@
+name: Nova Forge arcade QA
+
+on:
+  push:
+    branches:
+      - main
+      - feature/original-arcade-maths-console-v1-20261018
+    paths:
+      - games/**
+      - tests/nova-*.test.cjs
+      - .github/workflows/arcade-ci.yml
+      - index.html
+      - scripts/build-static.mjs
+      - learning-sw.js
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  playable-and-accurate:
+    name: Validate maths game, controls and mission generation
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check original game JavaScript and every mission generator
+        run: |
+          node --check games/maths-data.js
+          node --check games/arcade.js
+          node --check tests/nova-maths.test.cjs
+          node --check tests/nova-interaction.test.cjs
+      - name: Run built-in Node tests — no paid dependencies
+        run: node --test tests/nova-maths.test.cjs tests/nova-interaction.test.cjs
+      - name: Verify production static game assets
+        run: |
+          node scripts/build-static.mjs
+          test -s dist/games/index.html
+          test -s dist/games/arcade.css
+          test -s dist/games/arcade.js
+          test -s dist/games/maths-data.js
+          echo "All original game files are ready for Cloudflare Workers."
