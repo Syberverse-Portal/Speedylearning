@@ -269,7 +269,7 @@ function stepsOnly(){
  section('Your calculation, step by step','Explain each step in the writing box, or draw a diagram in the squared-paper area. There is no single required layout.');
 }
 const templates={
- numberline:simpleNumberline,tenframe:tenFrames,partwhole,partition,column,
+ numberline:simpleNumberline,tenframe:tenFrames,partwhole:partWhole,partition,column,
  grid:gridMultiply,array:arrayModel,busstop:busStop,bar:barModel,
  fractions:fractionStrips,steps:stepsOnly,squared:stepsOnly
 };
