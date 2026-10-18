@@ -21,6 +21,7 @@ const publicFiles = [
   "sitemap.xml",
   "assets/speedy-icon.svg",
   "assets/speedy-world.css",
+  "assets/speedy-modules.css",
   "assets/speedy-world.js",
   "assets/speedy-pages.css",
   "assets/mascot-dash.svg",
