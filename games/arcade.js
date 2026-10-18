@@ -54,6 +54,8 @@ function setMode(mode){
  $("victoryPanel").hidden=mode!=="victory";
  $("forgeControls").hidden=mode!=="forge";
  $("flightControls").hidden=mode!=="flight";
+ $("stageBrief").hidden=mode!=="forge";
+ $("pilotBrief").hidden=mode!=="flight";
  $("stage").classList.toggle("flying",mode==="flight");
  $("missionLabel").textContent=mode==="intro"?"NOVA FIELD · READY":
     mode==="victory"?"SKY REPAIRED":state.mission?state.mission.title.toUpperCase():"NOVA FORGE";
@@ -132,6 +134,7 @@ function updateSelection(){
  const values=picks.map(i=>state.mission.values[i]);
  const total=values.reduce((a,b)=>a+b,0);
  $("equation").textContent=(values.length?values.join(" + ")+" = ":"")+" "+total;
+ $("stageEnergy").textContent=values.length?"Your crystal energy: "+values.join(" + ")+" = "+total+" · Tap more crystals or Ignite.":"Tap glowing crystals to build your answer, or use the buttons below.";
  [...$("shards").children].forEach((b,i)=>{
   const on=picks.includes(i);
   b.classList.toggle("selected",on);
@@ -150,6 +153,7 @@ function setupMission(same=false){
  state.selected=[];state.hints=0;state.shots=[];state.padIndex=0;
  state.shipY=.5;state.shipV=0;state.shipAim=null;
  $("prompt").textContent=state.mission.prompt;
+ $("stagePrompt").textContent=state.mission.prompt;
  $("skill").textContent=state.year.toUpperCase()+" · "+state.mission.skill.toUpperCase();
  $("work").value="";
  const preferred=read("speedy-nova-class-method",null);
@@ -167,7 +171,7 @@ function setupMission(same=false){
   crystals.appendChild(b);
  });
  setMode("forge");updateSelection();
- $("forgeControls").scrollIntoView({behavior:state.calm?"instant":"smooth",block:"nearest"});
+ $("stage").scrollIntoView({behavior:state.calm?"instant":"smooth",block:"start"});
 }
 function methodText(){
  const method=$("method").value;
@@ -214,7 +218,7 @@ function buildFlight(){
 function beginFlight(){
  buildFlight();setMode("flight");
  burst(cssW*.25,cssH*.5,col(1),30);playSound(230,"sawtooth",.55,.035);
- $("flightControls").scrollIntoView({behavior:state.calm?"instant":"smooth",block:"nearest"});
+ $("stage").scrollIntoView({behavior:state.calm?"instant":"smooth",block:"start"});
 }
 function finishMission(){
  if(state.mode!=="flight")return;
@@ -228,7 +232,7 @@ function finishMission(){
  $("winLights").textContent=String(state.lights);
  setMode("victory");sequence();
  burst(cssW*.5,cssH*.4,col(1),48);
- window.scrollTo({top:0,behavior:state.calm?"instant":"smooth"});
+ $("stage").scrollIntoView({behavior:state.calm?"instant":"smooth",block:"start"});
 }
 function togglePause(){
  if(state.mode!=="flight")return;
@@ -576,7 +580,7 @@ function connectControls(){
   state.hints++;
   const msg=state.hints===1?"Use the same method as your lesson. "+state.mission.help:
     "Try finding two chunks that combine to the answer, or use your school-method notebook.";
-  announce(msg);alertToast("💡 "+msg,4000);
+  announce(msg);$("stageEnergy").textContent="💡 "+msg;alertToast("💡 "+msg,4000);
  });
  $("method").addEventListener("change",()=>{
   $("methodHint").textContent=methodText();
@@ -599,6 +603,11 @@ function connectControls(){
   $("contrast").setAttribute("aria-pressed",String(state.contrast));
  });
  $("pause").addEventListener("click",togglePause);
+ $("stageHelp").addEventListener("click",()=>{
+   if(state.mode==="forge"){$("help").click();return}
+   if(state.mode==="flight"){alertToast("Steer up and down by dragging here, pressing ↑ ↓, or moving your controller stick.",4500);return}
+   $("how").open=true;$("how").scrollIntoView({behavior:state.calm?"instant":"smooth",block:"center"});
+ });
  $("introHow").addEventListener("click",()=>{
   $("how").open=true;$("how").scrollIntoView({behavior:"smooth",block:"center"});
  });
