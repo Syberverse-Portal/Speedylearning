@@ -29,6 +29,7 @@ class FakeElement {
   append(...items){this.children.push(...items)}
   add(o){this.children.push(o)}
   focus(){}
+  scrollIntoView(){}
   setPointerCapture(){}
   getBoundingClientRect(){return {width:900,height:540,left:0,top:0}}
   getContext(){
