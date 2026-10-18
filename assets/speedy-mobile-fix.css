@@ -1,0 +1,77 @@
+/* Mobile-first correction of the approved SpeedyLearning concept. */
+.speed-menu-toggle{display:none;align-items:center;gap:6px;padding:9px 12px;border:2px solid #cfe9ff;border-radius:14px;background:#fff;color:#184791;font:900 .84rem "Nunito",system-ui,sans-serif;cursor:pointer}
+body.speedy-world .speed-homehero{background:radial-gradient(ellipse at 25% 10%,#fff9,transparent 52%),linear-gradient(145deg,#eafaff,#91dbff 80%,#d3f3ff)!important;border:0!important;box-shadow:0 10px 27px #286eae20!important;overflow:hidden;min-height:0;grid-template-columns:minmax(275px,.45fr) minmax(0,.55fr);gap:12px;padding:clamp(16px,3vw,32px);border-radius:25px}
+body.speedy-world .speed-homehero .speed-copy{align-items:flex-start;text-align:left;justify-content:center;padding:0}
+body.speedy-world .speed-homehero h2{font-size:clamp(2.35rem,4.55vw,4.5rem)!important;line-height:.99!important;letter-spacing:-.035em;margin:10px 0 15px!important;text-shadow:0 2px 0 #fff9}
+body.speedy-world .speed-homehero h2>span{font-size:.56em!important;line-height:1.12!important;margin-top:4px}
+body.speedy-world .speed-homehero p{font-size:clamp(.91rem,1.25vw,1.05rem);line-height:1.4;margin:0 0 14px;max-width:400px}
+body.speedy-world .speed-homehero .speed-hello{font-size:.72rem;letter-spacing:0;padding:6px 12px;box-shadow:none}
+body.speedy-world .speed-homehero .speed-start{font-size:1.02rem;min-height:50px;padding:13px 23px}
+body.speedy-world .speed-promise{font-size:.71rem;line-height:1.25;margin:12px 0 0}
+body.speedy-world .speed-crew{display:block!important;width:100%!important;max-width:450px;min-height:0!important;height:auto!important;aspect-ratio:690/258;margin:6px 0 0!important;background:url('/assets/reference-hero-friends.webp') center bottom/100% auto no-repeat!important;filter:drop-shadow(0 7px 7px #19548d26);-webkit-mask-image:radial-gradient(ellipse 82% 88% at 50% 55%,black 74%,transparent 100%);mask-image:radial-gradient(ellipse 82% 88% at 50% 55%,black 74%,transparent 100%)}
+body.speedy-world .speed-crew img{display:none!important}
+body.speedy-world .speed-world-map{overflow:hidden!important;border-radius:24px;min-height:0;align-self:center}
+body.speedy-world .speed-world-map .speed-island-picture{content:url('/assets/reference-world-islands.webp')!important;width:111%;height:auto;max-width:none!important;object-fit:contain;border-radius:0!important;transform:translateX(-5%);animation:none!important;filter:drop-shadow(0 8px 8px #357eaf2a);-webkit-mask-image:linear-gradient(to right,transparent 0%,black 11%,black 100%);mask-image:linear-gradient(to right,transparent 0%,black 11%,black 100%)}
+body.speedy-world .speed-homehero:after{display:none}
+body.speedy-world .map-hotspot{z-index:6;border-radius:50px;font-size:.67rem;background:#fff9ddef;border:2px solid #fff;padding:5px 8px;box-shadow:0 3px 0 #4a91c18e}
+body.speedy-world .map-maths{top:36%;left:24%}body.speedy-world .map-reading{top:20%;left:52%}body.speedy-world .map-writing{top:26%;right:6%}body.speedy-world .map-science{bottom:28%;left:45%}body.speedy-world .map-games{bottom:25%;right:6%}
+body.speedy-world .speed-subjects{margin-top:11px}
+body.speedy-world .speed-subject-grid{gap:12px}
+body.speedy-world .speed-subject-card{position:relative;overflow:hidden;min-height:175px;padding:107px 14px 13px!important;border:4px solid #fff!important;border-radius:22px;background-image:none!important;box-shadow:0 6px 0 #4b82bf57,0 12px 20px #2266af2b!important;isolation:isolate;justify-content:flex-end!important;align-items:flex-start!important}
+body.speedy-world .speed-subject-card:before{content:"✦    ✧";position:absolute;top:9px;left:12px;font-size:21px;color:#fffb;pointer-events:none}
+body.speedy-world .speed-subject-card:after{content:'';position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,#10376f38);pointer-events:none;z-index:0}
+body.speedy-world .speed-subject-card.maths{background:linear-gradient(145deg,#64d8ff,#267fe8)!important}
+body.speedy-world .speed-subject-card.reading{background:linear-gradient(145deg,#d5a3ff,#864dd7)!important}
+body.speedy-world .speed-subject-card.writing{background:linear-gradient(145deg,#9affee,#06b2c0)!important}
+body.speedy-world .speed-subject-card.science{background:linear-gradient(145deg,#b8ffa5,#32b46b)!important}
+body.speedy-world .speed-subject-card.games{background:linear-gradient(145deg,#b6a6ff,#5250d2)!important}
+body.speedy-world .speed-subject-card>img{display:block!important;position:absolute;top:4px;right:8px;width:130px;max-width:70%;height:124px;object-fit:contain;filter:drop-shadow(0 4px 4px #2258942e);z-index:1;transition:transform .15s}
+body.speedy-world .speed-subject-card:hover>img{transform:rotate(-4deg) scale(1.06)}
+body.speedy-world .speed-subject-card .speed-subject-label,body.speedy-world .speed-subject-card .speed-subject-desc{color:white!important;position:relative;z-index:2;max-width:84%;text-shadow:0 1px 4px #133d72a6}
+body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.42rem!important;line-height:1.1}
+body.speedy-world .speed-subject-card .speed-subject-desc{font-size:.75rem!important;line-height:1.25}
+body.speedy-world .speed-subject-card .speed-card-go{z-index:4;right:9px;bottom:10px;width:32px;height:32px}
+body.speedy-world .speed-journey-section{background:linear-gradient(145deg,#fffdf9,#e9f7ff)!important;box-shadow:0 9px 26px #2867a524}
+body.speedy-world .sj-map-wrap{background:#b9edff}
+@media(max-width:900px){
+ .speed-top,body.speedy-world .speed-top{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto!important;align-items:center!important;flex-direction:unset!important;gap:6px!important;padding:8px 12px!important;min-height:60px;position:relative!important;margin:0 auto 6px!important;border-radius:0 0 18px 18px!important}
+ .speed-top .speed-logo,body.speedy-world .speed-top .speed-logo{grid-column:1;grid-row:1;white-space:nowrap;justify-content:start!important;margin:0!important;font-size:clamp(1.37rem,5.4vw,1.8rem)!important;letter-spacing:-.06em}
+ .speed-top .speed-logo .logo-spark{font-size:.9rem;margin-right:2px}
+ .speed-top .speed-nav-cta{display:none!important}
+ .speed-top .speed-menu-toggle{display:inline-flex!important;grid-column:2;grid-row:1;z-index:52}
+ .speed-top nav,body.speedy-world .speed-top nav{display:none!important;position:absolute!important;top:calc(100% - 1px);left:7px;right:7px;z-index:51;background:#fffffff9;border:2px solid #d7e9fb;border-radius:0 0 16px 16px;padding:10px!important;box-shadow:0 12px 28px #194f9a42;flex-direction:column!important;gap:5px!important;justify-content:flex-start!important;align-items:stretch!important}
+ .speed-top.nav-open nav,body.speedy-world .speed-top.nav-open nav{display:flex!important}
+ .speed-top nav a{display:block!important;padding:11px 12px!important;text-align:left;font-size:.9rem!important;border-radius:11px!important}
+ body.speedy-world{padding:0 9px 20px!important}
+ body.speedy-world .speed-homehero{grid-template-columns:1fr!important;gap:0!important;padding:16px 12px 12px!important;margin:4px auto 10px!important;min-height:0!important;border-radius:20px!important}
+ body.speedy-world .speed-homehero .speed-copy{align-items:center!important;text-align:center!important}
+ body.speedy-world .speed-homehero .speed-hello{font-size:.69rem!important;padding:5px 10px!important}
+ body.speedy-world .speed-homehero h2{font-size:clamp(2.18rem,8.7vw,3.6rem)!important;line-height:1!important;margin:9px 0 10px!important}
+ body.speedy-world .speed-homehero h2>span{font-size:.56em!important;margin-top:4px!important}
+ body.speedy-world .speed-homehero p{font-size:.87rem!important;line-height:1.36!important;margin:0 auto 9px!important;max-width:380px}
+ body.speedy-world .speed-homehero .speed-start{font-size:.94rem!important;min-height:46px!important;padding:10px 20px!important;border-radius:28px}
+ body.speedy-world .speed-promise{margin:11px 0 4px!important;font-size:.64rem!important}
+ body.speedy-world .speed-crew{aspect-ratio:690/245!important;width:min(100%,400px)!important;height:auto!important;min-height:0!important;margin:2px auto -8px!important;background-size:100% auto!important;background-position:center bottom!important}
+ body.speedy-world .speed-world-map{width:100%;max-width:495px;min-height:0!important;aspect-ratio:1024/622;margin:0 auto!important;display:flex;align-items:center;justify-content:center;border-radius:15px}
+ body.speedy-world .speed-world-map .speed-island-picture{width:112%!important;height:100%!important;max-width:none!important;object-fit:cover;transform:translateX(-5%)!important;mask-image:linear-gradient(90deg,transparent 0%,black 12%)}
+ body.speedy-world .map-hotspot{font-size:0!important;width:30px;height:30px;padding:0!important;display:grid!important;place-items:center!important;border-radius:50%!important}
+ body.speedy-world .map-hotspot span{font-size:16px!important;margin:0!important}
+ body.speedy-world .speed-subjects{margin-top:6px!important}
+ body.speedy-world .speed-section-title{font-size:1.37rem!important;margin:5px auto 9px!important}
+ body.speedy-world .speed-subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ body.speedy-world .speed-subject-card{min-height:141px!important;padding:87px 9px 10px!important;border-radius:17px!important;box-shadow:0 4px 0 #4b82bf4d!important}
+ body.speedy-world .speed-subject-card>img{height:97px!important;width:103px!important;max-width:71%!important;right:0;top:1px}
+ body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.25rem!important}
+ body.speedy-world .speed-subject-card .speed-subject-desc{font-size:.68rem!important;max-width:84%}
+ body.speedy-world .speed-subject-grid .speed-subject-card:last-child{grid-column:1/-1;min-height:116px!important;padding:55px 13px 10px!important}
+ body.speedy-world .speed-subject-grid .speed-subject-card:last-child>img{right:13%!important;left:auto!important;width:120px!important;height:110px!important}
+ body.speedy-world .speed-subject-grid .speed-subject-card:last-child .speed-subject-label,body.speedy-world .speed-subject-grid .speed-subject-card:last-child .speed-subject-desc{margin-left:0!important}
+ body.speedy-world .speed-journey-section{padding:12px!important;border-radius:20px!important;margin-top:13px}
+ body.speedy-world .speed-more{padding:13px!important}
+ body.speedy-world:has(#speedHero:not([hidden])) .mute{display:none!important}
+ body.speedy-world .mute{position:fixed!important;top:auto!important;bottom:15px!important;left:12px!important;right:auto!important;width:42px!important;height:42px!important;z-index:45!important}
+ body.speedy-world .mute.auto{left:62px!important;right:auto!important}
+ body.speedy-world .mute.ask{left:112px!important;right:auto!important}
+}
+@media(max-width:380px){body.speedy-world .speed-homehero h2{font-size:clamp(2rem,9vw,2.38rem)!important}body.speedy-world .speed-homehero p{font-size:.82rem!important}.speed-top .speed-logo{font-size:1.4rem!important}body.speedy-world .map-hotspot{width:27px;height:27px}body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.2rem!important}}
+@media(prefers-reduced-motion:reduce){body.speedy-world .speed-island-picture{animation:none!important}}
