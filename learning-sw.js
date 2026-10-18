@@ -1,6 +1,6 @@
 /* SpeedyLearning optional offline shell. Same-origin educational assets only. */
-const CACHE = 'speedylearning-offline-v5';
-const CORE = ['/', '/index.html', '/speedy-plus.js', '/maths-methods.js', '/maths-workspace.js', '/maths-workspace.css', '/manifest.webmanifest', '/assets/speedy-icon.svg', '/quests/', '/quests/index.html', '/quests/quests.js', '/quests/engine.js', '/learning-paths-data.js'];
+const CACHE = 'speedylearning-offline-v6';
+const CORE = ['/', '/index.html', '/speedy-plus.js', '/maths-methods.js', '/maths-workspace.js', '/maths-workspace.css', '/manifest.webmanifest', '/assets/speedy-icon.svg', '/quests/', '/quests/index.html', '/quests/quests.js', '/quests/engine.js', '/learning-paths-data.js', '/games/', '/games/index.html', '/games/maths-data.js', '/games/arcade.js', '/games/arcade.css'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()).catch(()=>{}));
 });
