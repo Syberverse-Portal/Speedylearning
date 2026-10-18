@@ -24,3 +24,5 @@ self.addEventListener('fetch',event=>{
   }
   if(CORE.includes(url.pathname))event.respondWith(caches.match(req).then(hit=>hit||fetch(req)));
 });
+
+/* v4 review engine cache verified in deployment check. */
