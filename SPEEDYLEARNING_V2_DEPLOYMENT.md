@@ -1,3 +1,5 @@
+> **2026-10-18 deployment update:** Visitor counts now use automatic Durable Object storage configured in `wrangler.jsonc`; you no longer need to create D1 manually. Refer to `WORKER_DEPLOYMENT.md`. The D1 instructions below document the legacy path only.
+
 # SpeedyLearning v2 Deployment and Operating Guide
 
 This branch provides: device-local personalised practice plans and parent reports, accessibility preferences, optional offline learning shell, PWA manifest, privacy information and a Cloudflare Pages advanced-mode Worker offering anonymous visit counts.
