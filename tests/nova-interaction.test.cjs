@@ -1,125 +1,151 @@
-/* node --test tests/nova-interaction.test.cjs — console-like arcade DOM tests.
- * No browser or external dependency required.
+/* Fast deterministic tests for the actual free-flight version of Nova Forge.
+ * This mounts the game in a small fake DOM, with a real animation tick clock.
  */
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const D=require('../games/maths-data.js');
-const code=fs.readFileSync(path.join(__dirname,'../games/arcade.js'),'utf8');
+const Maths=require('../games/maths-data.js');
+const js=fs.readFileSync(path.join(__dirname,'../games/expedition.js'),'utf8');
 const html=fs.readFileSync(path.join(__dirname,'../games/index.html'),'utf8');
 
-class Element{
- constructor(tagName='div'){
-  this.tagName=tagName;this.children=[];this.handlers={};this.hidden=false;this.textContent='';
-  this.value='';this.disabled=false;this.style={setProperty(){}};this.aria={};this.options=this.children;
-  this.classValues=new Set();this.classList={
-   add:v=>this.classValues.add(v),remove:v=>this.classValues.delete(v),
-   toggle:(v,on)=>{if(on)this.classValues.add(v);else this.classValues.delete(v)},
-   contains:v=>this.classValues.has(v)};
-  this.width=1100;this.height=620;this.attrs={};
- }
- append(...items){this.children.push(...items)}
- appendChild(x){this.children.push(x);return x}
- replaceChildren(...items){this.children.splice(0,this.children.length,...items)}
- add(o){this.children.push(o)}
- setAttribute(k,v){this.attrs[k]=v}
- getAttribute(k){return this.attrs[k]}
- addEventListener(k,f){(this.handlers[k]||=[]).push(f)}
- fire(k,event={}){for(const f of this.handlers[k]||[])f(event)}
- click(){if(this.disabled)return;this.fire('click',{detail:1,preventDefault(){}})}
- scrollIntoView(){}
- getBoundingClientRect(){return {width:1100,height:620,left:0,top:0}}
- setPointerCapture(){}
- getContext(){
-  const ctx={};const methods=['save','restore','translate','rotate','setTransform','fillRect','strokeRect',
-   'beginPath','moveTo','lineTo','closePath','arc','ellipse','fill','stroke','fillText','clearRect'];
-  for(const method of methods)ctx[method]=()=>{};
-  ctx.createLinearGradient=ctx.createRadialGradient=()=>({addColorStop(){}});
-  return ctx;
- }
+class FakeElement {
+  constructor(tagName='DIV') {
+    this.tagName=tagName;this.children=[];this.handlers={};
+    this.hidden=false;this.textContent='';this.value='';this.disabled=false;this.style={};
+    this.width=900;this.height=540;this.attrs={};this.classValues=new Set();
+    this.classList={
+      add:v=>this.classValues.add(v),remove:v=>this.classValues.delete(v),
+      contains:v=>this.classValues.has(v)
+    };
+  }
+  addEventListener(type,fn){(this.handlers[type]||=[]).push(fn)}
+  dispatch(type,event={}){for(const fn of this.handlers[type]||[])fn(event)}
+  click(){if(this.disabled)return;this.dispatch('click',{detail:1,preventDefault(){}})}
+  setAttribute(k,v){this.attrs[k]=v}
+  getAttribute(k){return this.attrs[k]}
+  replaceChildren(...items){this.children.splice(0,this.children.length,...items)}
+  appendChild(x){this.children.push(x);return x}
+  add(o){this.children.push(o)}
+  focus(){}
+  setPointerCapture(){}
+  getBoundingClientRect(){return {width:900,height:540,left:0,top:0}}
+  getContext(){
+    const ctx={};
+    for(const method of ['save','restore','translate','rotate','setTransform','fillRect','strokeRect',
+      'beginPath','moveTo','lineTo','closePath','arc','ellipse','fill','stroke','fillText','clearRect'])
+      ctx[method]=()=>{};
+    ctx.createLinearGradient=ctx.createRadialGradient=()=>({addColorStop(){}});
+    return ctx;
+  }
 }
-function mount(search='?stage=Year%203'){
- const elements=new Map();
- for(const item of html.matchAll(/id="([^"]+)"/g)){elements.set(item[1],new Element(item[1]==='world'?'CANVAS':'DIV'))}
- const dom={
-  hidden:false,body:new Element("BODY"),
-  getElementById:id=>elements.get(id)||null,
-  createElement:tag=>new Element(tag.toUpperCase()),
-  addEventListener(){}
- };
- const data={map:new Map(),getItem(k){return this.map.get(k)||null},setItem(k,v){this.map.set(k,String(v))}};
- let queued=null;
- const requestAnimationFrame=fn=>{queued=fn};
- let time=0;
- const pad={connected:true,axes:[0,0],buttons:Array.from({length:17},()=>({pressed:false}))};
- const navigator={vibrate(){},getGamepads:()=>[pad]};
- const window={SpeedyArcadeMaths:D,matchMedia:()=>({matches:false}),devicePixelRatio:1,
-  scrollTo(){},addEventListener(){}};
- const Option=function(label,value){const o=new Element('OPTION');o.label=label;o.value=value;return o};
- const location={search};
- const setTimeout=fn=>{fn();return 1};
- const clearTimeout=()=>{};
- const raf=()=>{const fn=queued;queued=null;time+=40;if(!fn)throw Error('No next frame');fn(time)};
- (new Function('window','document','navigator','localStorage','location','Option',
- 'requestAnimationFrame','setTimeout','clearTimeout',code))(window,dom,navigator,data,location,
- Option,requestAnimationFrame,setTimeout,clearTimeout);
- return {window,dom,elements,storage:data,pad,tick:raf};
+function mount(stage="Year 3"){
+  const elements=new Map();
+  for(const item of html.matchAll(/id="([^"]+)"/g))elements.set(item[1],new FakeElement());
+  const document=new FakeElement('DOCUMENT');
+  document.hidden=false;
+  document.getElementById=id=>elements.get(id)||null;
+  document.createElement=t=>new FakeElement(t.toUpperCase());
+  const localStorage={
+    map:new Map(),
+    getItem(k){return this.map.get(k)||null},
+    setItem(k,v){this.map.set(k,String(v))}
+  };
+  const navigator={getGamepads:()=>[]};
+  const window={
+    SpeedyArcadeMaths:Maths,
+    matchMedia:()=>({matches:false}),
+    devicePixelRatio:1,
+    addEventListener(){}
+  };
+  const location={search:"?stage="+encodeURIComponent(stage)};
+  const Option=function(label,value){const e=new FakeElement('OPTION');e.label=label;e.value=value;return e;};
+  let queued=null,now=0;
+  const requestAnimationFrame=fn=>{queued=fn};
+  const tick=(n=1)=>{
+    for(let i=0;i<n;i++){
+      assert.ok(queued,'animation is live');
+      const fn=queued;queued=null;now+=40;fn(now);
+    }
+  };
+  (new Function('window','document','navigator','localStorage','location','Option',
+    'requestAnimationFrame',js))(window,document,navigator,localStorage,location,Option,
+    requestAnimationFrame);
+  return {window,document,elements,localStorage,tick,
+    el:id=>elements.get(id),
+    key:(type,key)=>document.dispatch(type,{key,target:{tagName:'DIV'},repeat:false,preventDefault(){}})};
 }
-test('all seven year selections open playable, age-specific Maths forge missions',()=>{
- const env=mount();
- for(const year of D.stages){
-  const input=env.elements.get('year');input.value=year;input.fire('change');
-  assert.equal(env.window.SpeedyNovaDiagnostics.year(),year);
-  assert.equal(env.window.SpeedyNovaDiagnostics.currentMode(),'intro');
-  env.elements.get('start').click();
-  assert.equal(env.window.SpeedyNovaDiagnostics.currentMode(),'forge');
-  assert.equal(env.elements.get('shards').children.length,9);
-  assert.match(env.elements.get('skill').textContent,new RegExp(year,'i'));
- }
+
+test('new game is an interactive 2D world at every primary year level',()=>{
+  const env=mount('Reception');
+  for(const y of Maths.stages){
+    env.el('year').value=y;env.el('year').dispatch('change',{target:{value:y}});
+    assert.equal(env.window.SpeedyRescueDiagnostics.year(),y);
+    env.el('launch').click();
+    assert.equal(env.window.SpeedyRescueDiagnostics.mode(),'playing');
+    assert.equal(env.window.SpeedyRescueDiagnostics.options().length,4);
+    const m=env.window.SpeedyRescueDiagnostics.mission();
+    assert.ok(m.prompt.length>10);
+    assert.ok(m.answer>=3);
+  }
 });
-test('player solves Maths with a flexible two-crystal route then actually pilots to victory',()=>{
- const env=mount('?stage=Year%205'),g=env.window.SpeedyNovaDiagnostics;
- assert.equal(g.currentMode(),'intro');
- env.elements.get('start').click();
- assert.equal(g.currentMode(),'forge');
- const mission=D.getGameData('Year 5',0);
- const vals=mission.values;
- let pair=null;for(let i=0;i<vals.length;i++)for(let j=i+1;j<vals.length;j++)
-  if(vals[i]+vals[j]===mission.answer){pair=[i,j];break}
- assert.ok(pair);
- const crystals=env.elements.get('shards');
- crystals.children[pair[0]].click();
- crystals.children[pair[1]].click();
- assert.equal(g.selectedEnergy(),2);
- assert.match(env.elements.get('forgeFeedback').textContent,/Energy balanced/);
- env.elements.get('ignite').click();
- assert.equal(g.currentMode(),'flight');
- for(let i=0;i<450;i++)env.tick();
- assert.equal(g.currentMode(),'victory');
- assert.equal(g.completed(),1);
- const store=JSON.parse(env.storage.getItem('speedy-nova-v1|Year 5'));
- assert.equal(store.finished,1);
- env.elements.get('next').click();
- assert.equal(g.currentMode(),'forge');
- assert.notEqual(g.mission(),mission.prompt);
+test('steering and physical Dash visibly move the spaceship',()=>{
+  const env=mount(),game=env.window.SpeedyRescueDiagnostics;
+  env.el('launch').click();
+  const before=game.position();
+  env.key('keydown','ArrowRight');env.tick(6);env.key('keyup','ArrowRight');
+  assert.ok(game.position().x>before.x+.05,'Right steering must move the actual ship');
+  const y=game.position().y;
+  env.key('keydown','ArrowUp');env.tick(4);env.key('keyup','ArrowUp');
+  assert.ok(game.position().y<y,'Up steering must move the actual ship');
+  env.el('dash').click();
+  assert.ok(game.dashCooldown()>0,'Dash activates a real cooldown');
+  env.tick(3);
+  assert.ok(Math.hypot(game.position().x-before.x,game.position().y-before.y)>.08);
+  env.el('pulse').click();
+  assert.ok(game.pulseCooldown()>0,'Pulse activates a real shockwave');
 });
-test('controller D-pad and action button can choose a shard',()=>{
- const env=mount();
- env.elements.get('start').click();
- const btn=env.pad.buttons;
- btn[0].pressed=true;env.tick();btn[0].pressed=false;env.tick();
- assert.equal(env.window.SpeedyNovaDiagnostics.selectedEnergy(),1);
- btn[15].pressed=true;env.tick();btn[15].pressed=false;env.tick();
- btn[0].pressed=true;env.tick();
- assert.equal(env.window.SpeedyNovaDiagnostics.selectedEnergy(),2);
+test('age-specific correct crystals advance three missions into victory',()=>{
+  const env=mount('Year 5'),game=env.window.SpeedyRescueDiagnostics;
+  env.el('launch').click();
+  for(let level=0;level<3;level++){
+    env.tick(16);
+    const mission=game.mission(),choices=game.options();
+    const correct=choices.findIndex(v=>v.value===mission.answer);
+    const wrong=choices.findIndex(v=>v.value!==mission.answer);
+    assert.ok(correct>=0&&wrong>=0);
+    if(level===0){
+      env.el('accessibleChoices').children[wrong].click();
+      assert.equal(game.progress(),0,'Wrong answer cannot finish a mission');
+      env.tick(30);
+    }
+    env.el('accessibleChoices').children[correct].click();
+    if(level<2){
+      assert.equal(game.progress(),level+1,'Correct answer opens next physical challenge');
+      assert.equal(game.mode(),'playing');
+    }
+  }
+  assert.equal(game.mode(),'victory');
+  assert.equal(JSON.parse(env.localStorage.getItem('speedy-rescue-progress|Year 5')).completed,1);
+  env.el('replay').click();
+  assert.equal(game.mode(),'playing');
+  assert.equal(game.progress(),0);
 });
-test('calm view, contrast, sound and pause are never mandatory',()=>{
- const env=mount();
- env.elements.get('motion').click();
- assert.match(env.elements.get('motion').textContent,/Calm on/);
- env.elements.get('contrast').click();
- assert.equal(env.elements.get('contrast').getAttribute('aria-pressed'),'true');
- env.elements.get('sound').click();
- assert.equal(env.elements.get('sound').getAttribute('aria-pressed'),'true');
+test('pause freezes game and resume restores it',()=>{
+  const env=mount(),g=env.window.SpeedyRescueDiagnostics;
+  env.el('launch').click();
+  env.el('pause').click();
+  assert.equal(g.mode(),'paused');
+  assert.equal(env.el('paused').hidden,false);
+  env.el('resume').click();
+  assert.equal(g.mode(),'playing');
+  assert.equal(env.el('paused').hidden,true);
+});
+test('visual options are safe and default sound off',()=>{
+  const env=mount();
+  assert.match(env.el('sound').textContent,/off/i);
+  env.el('sound').click();
+  assert.match(env.el('sound').textContent,/on/i);
+  env.el('calm').click();
+  assert.match(env.el('calm').textContent,/on/i);
 });
