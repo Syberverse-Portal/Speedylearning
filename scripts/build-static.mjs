@@ -24,7 +24,11 @@ const publicFiles = [
   "console/sw.js",
   "quests/index.html",
   "quests/quests.js",
-  "quests/engine.js"
+  "quests/engine.js",
+  "games/index.html",
+  "games/maths-data.js",
+  "games/arcade.js",
+  "games/arcade.css"
 ];
 
 rmSync(output, { recursive: true, force: true });
