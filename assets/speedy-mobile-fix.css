@@ -1,77 +1,96 @@
-/* Mobile-first correction of the approved SpeedyLearning concept. */
-.speed-menu-toggle{display:none;align-items:center;gap:6px;padding:9px 12px;border:2px solid #cfe9ff;border-radius:14px;background:#fff;color:#184791;font:900 .84rem "Nunito",system-ui,sans-serif;cursor:pointer}
-body.speedy-world .speed-homehero{background:radial-gradient(ellipse at 25% 10%,#fff9,transparent 52%),linear-gradient(145deg,#eafaff,#91dbff 80%,#d3f3ff)!important;border:0!important;box-shadow:0 10px 27px #286eae20!important;overflow:hidden;min-height:0;grid-template-columns:minmax(275px,.45fr) minmax(0,.55fr);gap:12px;padding:clamp(16px,3vw,32px);border-radius:25px}
-body.speedy-world .speed-homehero .speed-copy{align-items:flex-start;text-align:left;justify-content:center;padding:0}
-body.speedy-world .speed-homehero h2{font-size:clamp(2.35rem,4.55vw,4.5rem)!important;line-height:.99!important;letter-spacing:-.035em;margin:10px 0 15px!important;text-shadow:0 2px 0 #fff9}
-body.speedy-world .speed-homehero h2>span{font-size:.56em!important;line-height:1.12!important;margin-top:4px}
-body.speedy-world .speed-homehero p{font-size:clamp(.91rem,1.25vw,1.05rem);line-height:1.4;margin:0 0 14px;max-width:400px}
-body.speedy-world .speed-homehero .speed-hello{font-size:.72rem;letter-spacing:0;padding:6px 12px;box-shadow:none}
-body.speedy-world .speed-homehero .speed-start{font-size:1.02rem;min-height:50px;padding:13px 23px}
-body.speedy-world .speed-promise{font-size:.71rem;line-height:1.25;margin:12px 0 0}
-body.speedy-world .speed-crew{display:block!important;width:100%!important;max-width:450px;min-height:0!important;height:auto!important;aspect-ratio:690/258;margin:6px 0 0!important;background:url('/assets/reference-hero-friends.webp') center bottom/100% auto no-repeat!important;filter:drop-shadow(0 7px 7px #19548d26);-webkit-mask-image:radial-gradient(ellipse 82% 88% at 50% 55%,black 74%,transparent 100%);mask-image:radial-gradient(ellipse 82% 88% at 50% 55%,black 74%,transparent 100%)}
+/* 2026-10-18: Mobile-first visual quality pass for the approved SpeedyLearning concept.
+   Uses purpose-cropped illustration assets. No screenshot-derived buttons/text. */
+.speed-menu-toggle{display:none;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:8px 13px;border:2px solid #cfe8ff;border-radius:14px;background:#fff;color:#164b9c;font:900 .85rem "Nunito",system-ui,sans-serif;cursor:pointer}
+.speed-menu-toggle .speed-menu-glyph{font-size:1.3rem;line-height:1}
+body.speedy-world .speed-homehero{background:radial-gradient(ellipse at 23% 16%,#fff9,transparent 50%),linear-gradient(135deg,#e4f8ff,#a6e2ff 72%,#dbf6ff)!important;border:0!important;box-shadow:0 15px 35px #1e6a9a1d!important;overflow:hidden;min-height:0;grid-template-columns:minmax(290px,.42fr) minmax(0,.58fr);gap:12px;padding:28px clamp(18px,2.5vw,39px) 20px;border-radius:26px}
+body.speedy-world .speed-homehero .speed-copy{align-items:flex-start;text-align:left;padding:0;justify-content:center}
+body.speedy-world .speed-homehero h2{font-size:clamp(2.35rem,4.4vw,4.65rem);line-height:.96;margin:12px 0 16px;letter-spacing:-.045em;filter:none;text-shadow:0 3px 0 #fff9}
+body.speedy-world .speed-homehero h2>span{font-size:.57em;margin-top:7px}
+body.speedy-world .speed-homehero p{font-size:clamp(.9rem,1.26vw,1.05rem);line-height:1.45;margin:0 0 16px;max-width:410px}
+body.speedy-world .speed-homehero .speed-hello{padding:7px 12px;font-size:.72rem;letter-spacing:0;box-shadow:none}
+body.speedy-world .speed-start{padding:13px 24px;min-height:51px;font-size:1rem}
+body.speedy-world .speed-promise{font-size:.7rem;margin-top:14px;line-height:1.25}
+body.speedy-world .speed-crew{display:block!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:726/282;max-width:450px;margin-top:4px!important;padding:0!important;background:url('/assets/hero-characters-clean.webp') center bottom/contain no-repeat!important;filter:drop-shadow(0 7px 8px #3d74a421)}
 body.speedy-world .speed-crew img{display:none!important}
-body.speedy-world .speed-world-map{overflow:hidden!important;border-radius:24px;min-height:0;align-self:center}
-body.speedy-world .speed-world-map .speed-island-picture{content:url('/assets/reference-world-islands.webp')!important;width:111%;height:auto;max-width:none!important;object-fit:contain;border-radius:0!important;transform:translateX(-5%);animation:none!important;filter:drop-shadow(0 8px 8px #357eaf2a);-webkit-mask-image:linear-gradient(to right,transparent 0%,black 11%,black 100%);mask-image:linear-gradient(to right,transparent 0%,black 11%,black 100%)}
+body.speedy-world .speed-world-map{min-height:0;overflow:visible!important;align-self:center}
+body.speedy-world .speed-world-map .speed-island-picture{content:url('/assets/hero-islands-clean.webp')!important;display:block;width:112%;height:auto;max-width:none;aspect-ratio:976/630;object-fit:contain;border-radius:0!important;filter:drop-shadow(0 12px 12px #187a9b27);animation:none!important}
 body.speedy-world .speed-homehero:after{display:none}
-body.speedy-world .map-hotspot{z-index:6;border-radius:50px;font-size:.67rem;background:#fff9ddef;border:2px solid #fff;padding:5px 8px;box-shadow:0 3px 0 #4a91c18e}
-body.speedy-world .map-maths{top:36%;left:24%}body.speedy-world .map-reading{top:20%;left:52%}body.speedy-world .map-writing{top:26%;right:6%}body.speedy-world .map-science{bottom:28%;left:45%}body.speedy-world .map-games{bottom:25%;right:6%}
-body.speedy-world .speed-subjects{margin-top:11px}
+body.speedy-world .map-hotspot{z-index:6;font-size:.64rem;border-radius:99px;padding:5px 8px;background:#fff9dded;border:2px solid #fff;box-shadow:0 3px 0 #5ba3d678}
+body.speedy-world .map-maths{top:37%;left:23%}body.speedy-world .map-reading{top:20%;left:50%}body.speedy-world .map-writing{top:28%;right:8%}body.speedy-world .map-science{bottom:27%;left:44%}body.speedy-world .map-games{bottom:25%;right:8%}
+body.speedy-world .speed-subjects{margin-top:15px}
 body.speedy-world .speed-subject-grid{gap:12px}
-body.speedy-world .speed-subject-card{position:relative;overflow:hidden;min-height:175px;padding:107px 14px 13px!important;border:4px solid #fff!important;border-radius:22px;background-image:none!important;box-shadow:0 6px 0 #4b82bf57,0 12px 20px #2266af2b!important;isolation:isolate;justify-content:flex-end!important;align-items:flex-start!important}
-body.speedy-world .speed-subject-card:before{content:"✦    ✧";position:absolute;top:9px;left:12px;font-size:21px;color:#fffb;pointer-events:none}
-body.speedy-world .speed-subject-card:after{content:'';position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,#10376f38);pointer-events:none;z-index:0}
-body.speedy-world .speed-subject-card.maths{background:linear-gradient(145deg,#64d8ff,#267fe8)!important}
-body.speedy-world .speed-subject-card.reading{background:linear-gradient(145deg,#d5a3ff,#864dd7)!important}
-body.speedy-world .speed-subject-card.writing{background:linear-gradient(145deg,#9affee,#06b2c0)!important}
-body.speedy-world .speed-subject-card.science{background:linear-gradient(145deg,#b8ffa5,#32b46b)!important}
-body.speedy-world .speed-subject-card.games{background:linear-gradient(145deg,#b6a6ff,#5250d2)!important}
-body.speedy-world .speed-subject-card>img{display:block!important;position:absolute;top:4px;right:8px;width:130px;max-width:70%;height:124px;object-fit:contain;filter:drop-shadow(0 4px 4px #2258942e);z-index:1;transition:transform .15s}
-body.speedy-world .speed-subject-card:hover>img{transform:rotate(-4deg) scale(1.06)}
-body.speedy-world .speed-subject-card .speed-subject-label,body.speedy-world .speed-subject-card .speed-subject-desc{color:white!important;position:relative;z-index:2;max-width:84%;text-shadow:0 1px 4px #133d72a6}
-body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.42rem!important;line-height:1.1}
-body.speedy-world .speed-subject-card .speed-subject-desc{font-size:.75rem!important;line-height:1.25}
-body.speedy-world .speed-subject-card .speed-card-go{z-index:4;right:9px;bottom:10px;width:32px;height:32px}
-body.speedy-world .speed-journey-section{background:linear-gradient(145deg,#fffdf9,#e9f7ff)!important;box-shadow:0 9px 26px #2867a524}
-body.speedy-world .sj-map-wrap{background:#b9edff}
+body.speedy-world .speed-subject-card{position:relative;min-height:184px;padding:115px 16px 13px!important;border:4px solid #fff!important;border-radius:23px;box-shadow:0 7px 0 #2f67a54d,0 12px 19px #2467af2b!important;background-image:none!important;overflow:hidden;isolation:isolate;align-items:flex-start!important;justify-content:flex-end!important}
+body.speedy-world .speed-subject-card:before{position:absolute;content:'✦  ✧';top:7px;left:11px;color:#fff9;font-size:21px;letter-spacing:15px;pointer-events:none}
+body.speedy-world .speed-subject-card:after{position:absolute;content:'';inset:auto 0 0;height:55%;background:linear-gradient(180deg,transparent,#071d5e45);pointer-events:none;z-index:0}
+body.speedy-world .speed-subject-card.maths{background:linear-gradient(145deg,#5fddff,#287be8)!important}
+body.speedy-world .speed-subject-card.reading{background:linear-gradient(145deg,#c387ff,#8748d3)!important}
+body.speedy-world .speed-subject-card.writing{background:linear-gradient(145deg,#67f4ea,#0ba9bf)!important}
+body.speedy-world .speed-subject-card.science{background:linear-gradient(145deg,#abf997,#33b967)!important}
+body.speedy-world .speed-subject-card.games{background:linear-gradient(145deg,#aaa8ff,#5750cc)!important}
+body.speedy-world .speed-subject-card>img{display:block!important;position:absolute;top:0;right:4px;width:141px;max-width:68%;height:137px;object-fit:contain;filter:drop-shadow(0 5px 4px #30599926);z-index:1;transition:transform .18s}
+body.speedy-world .speed-subject-card.maths>img{content:url('/assets/mascot-maths-clean.webp')}
+body.speedy-world .speed-subject-card.reading>img{content:url('/assets/mascot-reading-clean.webp')}
+body.speedy-world .speed-subject-card.writing>img{content:url('/assets/mascot-writing-clean.webp')}
+body.speedy-world .speed-subject-card.science>img{content:url('/assets/mascot-science-clean.webp')}
+body.speedy-world .speed-subject-card.games>img{content:url('/assets/mascot-games-clean.webp')}
+body.speedy-world .speed-subject-card .speed-subject-label,body.speedy-world .speed-subject-card .speed-subject-desc{color:white;position:relative;z-index:2;text-shadow:0 1px 3px #10316d6b;max-width:80%}
+body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.5rem;line-height:1.1;font-weight:1000}
+body.speedy-world .speed-subject-card .speed-subject-desc{font-size:.75rem;line-height:1.25;max-width:82%}
+body.speedy-world .speed-subject-card .speed-card-go{z-index:4;width:32px;height:32px;right:9px;bottom:12px}
+body.speedy-world .speed-subject-card:hover>img{transform:rotate(-4deg) scale(1.03)}
+body.speedy-world .speed-journey-section{background:linear-gradient(145deg,#fffdfa,#eaf8ff);box-shadow:0 12px 25px #2a6aab22}
+body.speedy-world .sj-map-image{object-fit:contain;background:#b8edff}
+body.speedy-world .sj-map-wrap{background:linear-gradient(160deg,#c8efff,#9de2ff)}
+body.speedy-world .sj-map-pin{box-shadow:0 3px 0 #337db57b}
 @media(max-width:900px){
- .speed-top,body.speedy-world .speed-top{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto!important;align-items:center!important;flex-direction:unset!important;gap:6px!important;padding:8px 12px!important;min-height:60px;position:relative!important;margin:0 auto 6px!important;border-radius:0 0 18px 18px!important}
- .speed-top .speed-logo,body.speedy-world .speed-top .speed-logo{grid-column:1;grid-row:1;white-space:nowrap;justify-content:start!important;margin:0!important;font-size:clamp(1.37rem,5.4vw,1.8rem)!important;letter-spacing:-.06em}
- .speed-top .speed-logo .logo-spark{font-size:.9rem;margin-right:2px}
+ .speed-top{min-height:58px;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:6px 8px!important;padding:9px 12px!important;position:relative!important;flex-direction:unset!important;align-items:center!important;border-radius:0 0 19px 19px!important}
+ .speed-top .speed-logo{margin:0!important;font-size:clamp(1.48rem,5vw,1.82rem)!important;line-height:1.1;justify-content:flex-start!important;grid-column:1;grid-row:1;letter-spacing:-.06em}
+ .speed-top .speed-logo .logo-spark{font-size:.95rem;margin-right:2px}
  .speed-top .speed-nav-cta{display:none!important}
  .speed-top .speed-menu-toggle{display:inline-flex!important;grid-column:2;grid-row:1;z-index:52}
- .speed-top nav,body.speedy-world .speed-top nav{display:none!important;position:absolute!important;top:calc(100% - 1px);left:7px;right:7px;z-index:51;background:#fffffff9;border:2px solid #d7e9fb;border-radius:0 0 16px 16px;padding:10px!important;box-shadow:0 12px 28px #194f9a42;flex-direction:column!important;gap:5px!important;justify-content:flex-start!important;align-items:stretch!important}
- .speed-top.nav-open nav,body.speedy-world .speed-top.nav-open nav{display:flex!important}
- .speed-top nav a{display:block!important;padding:11px 12px!important;text-align:left;font-size:.9rem!important;border-radius:11px!important}
+ .speed-top nav{display:none!important;position:absolute;top:calc(100% - 1px);left:7px;right:7px;background:#fffffffa;z-index:51;align-items:stretch!important;justify-content:start!important;border:2px solid #dce9ff;border-radius:0 0 17px 17px;padding:10px!important;box-shadow:0 14px 30px #245d9b40;flex-direction:column!important;gap:5px!important}
+ .speed-top.nav-open nav{display:flex!important}
+ .speed-top nav a{display:block!important;margin:0!important;padding:11px 12px!important;border-radius:11px;font-size:.92rem!important;text-align:left}
+ .speed-top nav a[aria-current=page]{background:#e9f4ff}
  body.speedy-world{padding:0 9px 20px!important}
- body.speedy-world .speed-homehero{grid-template-columns:1fr!important;gap:0!important;padding:16px 12px 12px!important;margin:4px auto 10px!important;min-height:0!important;border-radius:20px!important}
+ body.speedy-world .speed-homehero{grid-template-columns:1fr!important;gap:0!important;padding:18px 12px 13px!important;min-height:0!important;border-radius:19px!important;margin:8px auto 10px!important}
  body.speedy-world .speed-homehero .speed-copy{align-items:center!important;text-align:center!important}
- body.speedy-world .speed-homehero .speed-hello{font-size:.69rem!important;padding:5px 10px!important}
- body.speedy-world .speed-homehero h2{font-size:clamp(2.18rem,8.7vw,3.6rem)!important;line-height:1!important;margin:9px 0 10px!important}
- body.speedy-world .speed-homehero h2>span{font-size:.56em!important;margin-top:4px!important}
- body.speedy-world .speed-homehero p{font-size:.87rem!important;line-height:1.36!important;margin:0 auto 9px!important;max-width:380px}
- body.speedy-world .speed-homehero .speed-start{font-size:.94rem!important;min-height:46px!important;padding:10px 20px!important;border-radius:28px}
- body.speedy-world .speed-promise{margin:11px 0 4px!important;font-size:.64rem!important}
- body.speedy-world .speed-crew{aspect-ratio:690/245!important;width:min(100%,400px)!important;height:auto!important;min-height:0!important;margin:2px auto -8px!important;background-size:100% auto!important;background-position:center bottom!important}
- body.speedy-world .speed-world-map{width:100%;max-width:495px;min-height:0!important;aspect-ratio:1024/622;margin:0 auto!important;display:flex;align-items:center;justify-content:center;border-radius:15px}
- body.speedy-world .speed-world-map .speed-island-picture{width:112%!important;height:100%!important;max-width:none!important;object-fit:cover;transform:translateX(-5%)!important;mask-image:linear-gradient(90deg,transparent 0%,black 12%)}
- body.speedy-world .map-hotspot{font-size:0!important;width:30px;height:30px;padding:0!important;display:grid!important;place-items:center!important;border-radius:50%!important}
- body.speedy-world .map-hotspot span{font-size:16px!important;margin:0!important}
+ body.speedy-world .speed-homehero .speed-hello{font-size:.7rem!important;padding:5px 11px}
+ body.speedy-world .speed-homehero h2{font-size:clamp(2.2rem,8.8vw,3.6rem)!important;line-height:1!important;margin:9px 0 10px!important;letter-spacing:-.035em}
+ body.speedy-world .speed-homehero h2>span{font-size:.56em!important;line-height:1.15!important;margin-top:3px}
+ body.speedy-world .speed-homehero p{font-size:.9rem!important;line-height:1.35!important;margin:0 auto 10px!important;max-width:370px}
+ body.speedy-world .speed-homehero .speed-start{font-size:.94rem!important;min-height:46px!important;padding:10px 22px!important;border-radius:30px!important}
+ body.speedy-world .speed-promise{margin:11px 0 4px!important;font-size:.66rem!important;line-height:1.2}
+ body.speedy-world .speed-crew{aspect-ratio:726/282!important;width:min(100%,395px)!important;height:auto!important;min-height:0!important;max-width:395px;margin:5px auto -10px!important;background-position:center!important;filter:drop-shadow(0 5px 5px #4781b835)}
+ body.speedy-world .speed-world-map{width:100%;min-height:0!important;max-width:500px;aspect-ratio:976/630;margin:0 auto!important;padding:0!important;display:flex;align-items:center;justify-content:center;overflow:visible!important}
+ body.speedy-world .speed-world-map .speed-island-picture{width:100%!important;height:100%!important;max-width:100%!important;object-fit:contain!important}
+ body.speedy-world .map-hotspot{font-size:0!important;width:30px!important;height:30px!important;border-radius:50%!important;padding:0!important;display:grid!important;place-items:center!important;min-width:0!important}
+ body.speedy-world .map-hotspot span{display:block;font-size:16px!important;margin:0!important;line-height:1}
+ body.speedy-world .map-maths{top:36%;left:24%}body.speedy-world .map-reading{top:22%;left:54%}body.speedy-world .map-writing{top:29%;right:6%}body.speedy-world .map-science{bottom:31%;left:45%}body.speedy-world .map-games{bottom:24%;right:7%}
  body.speedy-world .speed-subjects{margin-top:6px!important}
- body.speedy-world .speed-section-title{font-size:1.37rem!important;margin:5px auto 9px!important}
- body.speedy-world .speed-subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
- body.speedy-world .speed-subject-card{min-height:141px!important;padding:87px 9px 10px!important;border-radius:17px!important;box-shadow:0 4px 0 #4b82bf4d!important}
- body.speedy-world .speed-subject-card>img{height:97px!important;width:103px!important;max-width:71%!important;right:0;top:1px}
- body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.25rem!important}
- body.speedy-world .speed-subject-card .speed-subject-desc{font-size:.68rem!important;max-width:84%}
- body.speedy-world .speed-subject-grid .speed-subject-card:last-child{grid-column:1/-1;min-height:116px!important;padding:55px 13px 10px!important}
- body.speedy-world .speed-subject-grid .speed-subject-card:last-child>img{right:13%!important;left:auto!important;width:120px!important;height:110px!important}
- body.speedy-world .speed-subject-grid .speed-subject-card:last-child .speed-subject-label,body.speedy-world .speed-subject-grid .speed-subject-card:last-child .speed-subject-desc{margin-left:0!important}
- body.speedy-world .speed-journey-section{padding:12px!important;border-radius:20px!important;margin-top:13px}
- body.speedy-world .speed-more{padding:13px!important}
+ body.speedy-world .speed-section-title{font-size:1.38rem!important;margin:2px auto 10px!important}
+ body.speedy-world .speed-subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ body.speedy-world .speed-subject-card{min-height:146px!important;padding:92px 10px 12px!important;box-shadow:0 5px 0 #337aa14d!important;border-radius:19px!important}
+ body.speedy-world .speed-subject-card>img{height:95px!important;width:100px!important;max-width:67%!important;right:0;top:-1px}
+ body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.35rem!important}
+ body.speedy-world .speed-subject-card .speed-subject-desc{font-size:.71rem!important;max-width:85%}
+ body.speedy-world .speed-subject-grid .speed-subject-card:last-child{grid-column:1/-1;min-height:120px!important;padding:56px 14px 11px!important}
+ body.speedy-world .speed-subject-grid .speed-subject-card:last-child>img{height:122px!important;width:130px!important;right:14%;left:auto!important;top:0!important}
+ body.speedy-world .speed-subject-grid .speed-subject-card:last-child .speed-subject-label,body.speedy-world .speed-subject-grid .speed-subject-card:last-child .speed-subject-desc{margin:0!important}
+ body.speedy-world .speed-journey-section{margin-top:15px;padding:12px;border-radius:22px}
+ body.speedy-world .speed-more{padding:12px!important}
+ /* Only display the speech controls when a lesson is open. Keep them away from the homepage. */
  body.speedy-world:has(#speedHero:not([hidden])) .mute{display:none!important}
- body.speedy-world .mute{position:fixed!important;top:auto!important;bottom:15px!important;left:12px!important;right:auto!important;width:42px!important;height:42px!important;z-index:45!important}
+ body.speedy-world .mute{position:fixed!important;top:auto!important;bottom:16px!important;width:42px!important;height:42px!important;z-index:45!important;left:12px!important;right:auto!important}
  body.speedy-world .mute.auto{left:62px!important;right:auto!important}
  body.speedy-world .mute.ask{left:112px!important;right:auto!important}
 }
-@media(max-width:380px){body.speedy-world .speed-homehero h2{font-size:clamp(2rem,9vw,2.38rem)!important}body.speedy-world .speed-homehero p{font-size:.82rem!important}.speed-top .speed-logo{font-size:1.4rem!important}body.speedy-world .map-hotspot{width:27px;height:27px}body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.2rem!important}}
-@media(prefers-reduced-motion:reduce){body.speedy-world .speed-island-picture{animation:none!important}}
+@media(max-width:380px){
+ body.speedy-world .speed-homehero h2{font-size:clamp(2rem,9vw,2.4rem)!important}
+ body.speedy-world .speed-homehero p{font-size:.84rem!important}
+ .speed-top .speed-logo{font-size:1.43rem!important}
+ body.speedy-world .speed-world-map{max-height:225px!important}
+ body.speedy-world .map-hotspot{width:27px!important;height:27px!important}
+ body.speedy-world .speed-subject-card .speed-subject-label{font-size:1.26rem!important}
+}
+@media(prefers-reduced-motion:reduce){body.speedy-world .speed-crew,body.speedy-world .speed-island-picture{animation:none!important}}
