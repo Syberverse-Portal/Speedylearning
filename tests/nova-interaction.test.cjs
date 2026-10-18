@@ -43,7 +43,7 @@ function mount(search='?stage=Year%203'){
  const elements=new Map();
  for(const item of html.matchAll(/id="([^"]+)"/g)){elements.set(item[1],new Element(item[1]==='world'?'CANVAS':'DIV'))}
  const dom={
-  hidden:false,
+  hidden:false,body:new Element("BODY"),
   getElementById:id=>elements.get(id)||null,
   createElement:tag=>new Element(tag.toUpperCase()),
   addEventListener(){}
