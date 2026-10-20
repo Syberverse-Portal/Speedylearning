@@ -31,6 +31,7 @@
  let save;
  try{save={...initial(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{save=initial()}
  save.complete=save.complete&&typeof save.complete==='object'?save.complete:{};
+ try{const who=localStorage.getItem('speedy-player')||'Me',y=localStorage.getItem('speedy-year|'+who);if(y)save.year=y;}catch{}
  const persist=()=>{save.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(save))}catch{}};
  let selected='maths',question=0,correctCount=0,answers=[],active=false;
  const $=(sel,root=document)=>root.querySelector(sel);
@@ -45,7 +46,7 @@
   const done=numberOfDone(),total=worlds.length;
   root.innerHTML=`
    <div class="sj-heading"><div><span class="sj-kicker">✦ YOUR ADVENTURE STARTS HERE</span><h2>Journey through the Learning Islands</h2><p>Choose your character, discover each island, complete real missions and earn your stars!</p></div><div class="sj-progress"><b>${done} / ${total} islands</b><div class="sj-progress-track"><span style="width:${done/total*100}%"></span></div><strong>⭐ ${save.stars} stars</strong></div></div>
-   <div class="sj-personalise"><label>My school year <select id="sjYear">${['Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6'].map(x=>'<option '+(save.year===x?'selected':'')+'>'+x+'</option>').join('')}</select></label><div class="sj-hero-choice"><span>My adventure buddy:</span>${['dash','sum','story','scribble','scout','spark'].map(n=>'<button class="sj-avatar '+(save.hero===n?'selected':'')+'" type="button" data-avatar="'+n+'" aria-label="Choose '+n+'" aria-pressed="'+(save.hero===n)+'"><img src="/assets/mascot-'+n+'.svg" alt=""></button>').join('')}</div></div>
+   <div class="sj-personalise"><label>My school year <select id="sjYear">${['Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6'].map(x=>'<option '+(save.year===x?'selected':'')+'>'+x+'</option>').join('')}</select></label><div class="sj-hero-choice"><span>My adventure buddy:</span>${['dash','sum','story','scribble','scout','spark'].map(n=>'<button class="sj-avatar '+(save.hero===n?'selected':'')+'" type="button" data-avatar="'+n+'" aria-label="Choose '+n+'" aria-pressed="'+(save.hero===n)+'"><img src="/assets/mascot-'+n+'.svg" alt=""></button>').join('')}<span class="sj-buddy-name" aria-live="polite">${save.hero.charAt(0).toUpperCase()+save.hero.slice(1)} is your buddy!</span></div></div>
    <div class="sj-map-wrap" aria-label="Learning island quest map">
     <img class="sj-map-image" src="/assets/reference-world-islands.webp" alt="Beautiful floating islands with a maths mountain, reading forest, writing woods, science laboratory and games galaxy.">
     <div class="sj-map-links">${worlds.map((w,i)=>'<button type="button" data-island="'+w.id+'" class="sj-map-pin sj-pin-'+w.id+(save.complete[w.id]?' achieved':'')+'"><span>'+(save.complete[w.id]?'✓':i+1)+'</span><b>'+w.name+'</b></button>').join('')}</div>
@@ -53,7 +54,7 @@
    <div class="sj-path">${worlds.map((w,i)=>'<button type="button" class="sj-stop '+(save.complete[w.id]?'complete':'')+'" data-island="'+w.id+'"><span class="sj-stop-icon">'+(save.complete[w.id]?'⭐':w.icon)+'</span><strong>'+w.name+'</strong><small>'+(save.complete[w.id]?'Island star earned!':'Explore & play')+'</small></button>').join('')}</div>
    <div class="sj-finale"><div>🏆 <strong>${done===5?'Adventure champion!':'Your treasure chest awaits!'}</strong><span>${done===5?'You completed all five islands! Replay any mission.':'Earn one star on each island to unlock your champion celebration.'}</span></div><button type="button" id="sjContinue">${done===5?'Play again':'Next adventure →'}</button></div>
   `;
-  $('#sjYear',root).addEventListener('change',e=>{save.year=e.target.value;persist();render()});
+  $('#sjYear',root).addEventListener('change',e=>{save.year=e.target.value;persist();try{const who=localStorage.getItem('speedy-player')||'Me';localStorage.setItem('speedy-year|'+who,save.year);}catch{}render()});
   root.querySelectorAll('[data-avatar]').forEach(b=>b.addEventListener('click',()=>{const y=scrollY;save.hero=b.dataset.avatar;persist();render();scrollTo({top:y,behavior:'instant'});const again=$('[data-avatar="'+save.hero+'"]');if(again)again.focus({preventScroll:true})}));
   root.querySelectorAll('[data-island]').forEach(b=>b.addEventListener('click',()=>openIsland(b.dataset.island)));
   $('#sjContinue',root).addEventListener('click',()=>openIsland((worlds.find(w=>!save.complete[w.id])||worlds[0]).id));

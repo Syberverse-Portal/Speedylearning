@@ -68,6 +68,8 @@
    '<img src="'+icon(c.mascot)+'" alt="" width="130" height="130" loading="lazy"><span class="speed-subject-label">'+c.name+'</span>'+
    '<span class="speed-subject-desc">'+c.desc+'</span><span class="speed-card-go" aria-hidden="true">➜</span></button>').join('')+'</div>';
   hero.after(modules);
+  // The personal hub (Today's Mission, Memory Garden, Times Tables) sits just under the welcome banner
+  const hub=document.getElementById('homeHub');if(hub)hero.after(hub);
   const journey=create('section','speed-journey');
   journey.id='journey';journey.setAttribute('aria-label','Your learning journey');
   journey.innerHTML='<div class="speed-journey-head"><h2>🗺️ Your Learning Journey</h2><p>Choose a destination. Every adventure is a chance to learn something new.</p></div>'+
