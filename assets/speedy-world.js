@@ -103,9 +103,10 @@
   more.innerHTML='<div class="speed-more-title"><div><h2 id="speedMoreHeading">Even more to explore!</h2><p id="speedMoreDescription">Animals, flags, books, spelling, SATs and activities for every curious mind.</p></div><button type="button" class="speed-how" id="speedHow" aria-controls="rules" aria-expanded="false">❔ How to play</button></div>';
   adventure.after(more); more.append(menu);more.after(rules);
   function find(tileName){
-   const titles={Maths:/^Maths/i,Reading:/Story Time/i,Writing:/Writing Workshop|^Writing/i,Progress:/My Progress/i,Parents:/Parents' Corner/i};
+   // Tile text starts with an icon, so match the subject name anywhere (case-sensitive "Maths" avoids "maths" in the SATs tile)
+   const titles={Maths:/Maths/,Reading:/Story Time/i,Writing:/Writing Workshop/i,Progress:/My Progress/i,Parents:/Parents' Corner/i};
    const query=titles[tileName]||new RegExp(tileName,'i');
-   return [...menu.querySelectorAll('button.cat')].find(b=>query.test(b.textContent.replace(/\\s+/g,' ').trim()));
+   return [...menu.querySelectorAll('button.cat')].find(b=>query.test(b.textContent.replace(/\s+/g,' ').trim()));
   }
   function go(target){
     if(target==='Games'){location.assign('/games/');return}

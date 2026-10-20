@@ -51,10 +51,10 @@
     <div class="sj-map-links">${worlds.map((w,i)=>'<button type="button" data-island="'+w.id+'" class="sj-map-pin sj-pin-'+w.id+(save.complete[w.id]?' achieved':'')+'"><span>'+(save.complete[w.id]?'✓':i+1)+'</span><b>'+w.name+'</b></button>').join('')}</div>
    </div>
    <div class="sj-path">${worlds.map((w,i)=>'<button type="button" class="sj-stop '+(save.complete[w.id]?'complete':'')+'" data-island="'+w.id+'"><span class="sj-stop-icon">'+(save.complete[w.id]?'⭐':w.icon)+'</span><strong>'+w.name+'</strong><small>'+(save.complete[w.id]?'Island star earned!':'Explore & play')+'</small></button>').join('')}</div>
-   <div class="sj-finale"><div>🏆 <strong>'+ (done===5?'Adventure champion!':'Your treasure chest awaits!') +'</strong><span>'+(done===5?'You completed all five islands! Replay any mission.':'Earn one star on each island to unlock your champion celebration.')+'</span></div><button type="button" id="sjContinue">'+(done===5?'Play again':'Next adventure →')+'</button></div>
+   <div class="sj-finale"><div>🏆 <strong>${done===5?'Adventure champion!':'Your treasure chest awaits!'}</strong><span>${done===5?'You completed all five islands! Replay any mission.':'Earn one star on each island to unlock your champion celebration.'}</span></div><button type="button" id="sjContinue">${done===5?'Play again':'Next adventure →'}</button></div>
   `;
   $('#sjYear',root).addEventListener('change',e=>{save.year=e.target.value;persist();render()});
-  root.querySelectorAll('[data-avatar]').forEach(b=>b.addEventListener('click',()=>{save.hero=b.dataset.avatar;persist();render()}));
+  root.querySelectorAll('[data-avatar]').forEach(b=>b.addEventListener('click',()=>{const y=scrollY;save.hero=b.dataset.avatar;persist();render();scrollTo({top:y,behavior:'instant'});const again=$('[data-avatar="'+save.hero+'"]');if(again)again.focus({preventScroll:true})}));
   root.querySelectorAll('[data-island]').forEach(b=>b.addEventListener('click',()=>openIsland(b.dataset.island)));
   $('#sjContinue',root).addEventListener('click',()=>openIsland((worlds.find(w=>!save.complete[w.id])||worlds[0]).id));
  }
