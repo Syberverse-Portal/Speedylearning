@@ -12,6 +12,10 @@ on:
       - index.html
       - scripts/build-static.mjs
       - learning-sw.js
+      - assets/speedy-profiles.*
+      - assets/speedy-journey.js
+      - quests/**
+      - tests/profiles-browser.cjs
   pull_request:
     branches:
       - main
@@ -67,6 +71,8 @@ jobs:
           node tests/nova-browser.cjs
       - name: Render redesigned homepage, quests and dashboard
         run: node tests/speedy-preview.cjs
+      - name: Learner profiles (no email, one per child, saved on device)
+        run: node tests/profiles-browser.cjs
       - name: Keep redesigned page screenshots
         uses: actions/upload-artifact@v4
         if: always()

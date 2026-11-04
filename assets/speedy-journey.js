@@ -1,7 +1,12 @@
 /* SpeedyLearning Journey - a genuine saved, replayable learning adventure. No accounts or tracking. */
 (()=>{
  "use strict";
- const KEY='speedy-island-journey-v1';
+ // Each learner profile has its own island journey. Progress saved before profiles existed
+ // belongs to the first learner who opens it on this device.
+ const LEGACY='speedy-island-journey-v1';
+ let who='Me';try{who=localStorage.getItem('speedy-player')||'Me'}catch{}
+ const KEY=LEGACY+'|'+who;
+ try{if(localStorage.getItem(KEY)===null&&!localStorage.getItem(LEGACY+'-claimed')){const old=localStorage.getItem(LEGACY);if(old){localStorage.setItem(KEY,old);localStorage.setItem(LEGACY+'-claimed',who)}}}catch{}
  const worlds=[
   {id:'maths',name:'Maths Mountain',icon:'🔢',mascot:'sum',color:'#36a8fa',intro:'Climb Number Mountain to collect your first star.',task:'Solve the number puzzle',kind:'choice'},
   {id:'reading',name:'Reading Forest',icon:'📚',mascot:'story',color:'#a66cf2',intro:'Find the hidden meaning among the story trees.',task:'Read and choose the answer',kind:'choice'},
@@ -31,7 +36,7 @@
  let save;
  try{save={...initial(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{save=initial()}
  save.complete=save.complete&&typeof save.complete==='object'?save.complete:{};
- try{const who=localStorage.getItem('speedy-player')||'Me',y=localStorage.getItem('speedy-year|'+who);if(y)save.year=y;}catch{}
+ try{const y=localStorage.getItem('speedy-year|'+who);if(y)save.year=y;const p=JSON.parse(localStorage.getItem('speedy-profile-meta')||'{}')[who];if(p&&p.buddy)save.hero=p.buddy;}catch{}
  const persist=()=>{save.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(save))}catch{}};
  let selected='maths',question=0,correctCount=0,answers=[],active=false;
  const $=(sel,root=document)=>root.querySelector(sel);
@@ -55,7 +60,7 @@
    <div class="sj-finale"><div>🏆 <strong>${done===5?'Adventure champion!':'Your treasure chest awaits!'}</strong><span>${done===5?'You completed all five islands! Replay any mission.':'Earn one star on each island to unlock your champion celebration.'}</span></div><button type="button" id="sjContinue">${done===5?'Play again':'Next adventure →'}</button></div>
   `;
   $('#sjYear',root).addEventListener('change',e=>{save.year=e.target.value;persist();try{const who=localStorage.getItem('speedy-player')||'Me';localStorage.setItem('speedy-year|'+who,save.year);}catch{}render()});
-  root.querySelectorAll('[data-avatar]').forEach(b=>b.addEventListener('click',()=>{const y=scrollY;save.hero=b.dataset.avatar;persist();render();scrollTo({top:y,behavior:'instant'});const again=$('[data-avatar="'+save.hero+'"]');if(again)again.focus({preventScroll:true})}));
+  root.querySelectorAll('[data-avatar]').forEach(b=>b.addEventListener('click',()=>{const y=scrollY;save.hero=b.dataset.avatar;persist();try{const all=JSON.parse(localStorage.getItem('speedy-profile-meta')||'{}');if(all[who]){all[who].buddy=save.hero;localStorage.setItem('speedy-profile-meta',JSON.stringify(all));dispatchEvent(new Event('speedy-profile-updated'))}}catch{}render();scrollTo({top:y,behavior:'instant'});const again=$('[data-avatar="'+save.hero+'"]');if(again)again.focus({preventScroll:true})}));
   root.querySelectorAll('[data-island]').forEach(b=>b.addEventListener('click',()=>openIsland(b.dataset.island)));
   $('#sjContinue',root).addEventListener('click',()=>openIsland((worlds.find(w=>!save.complete[w.id])||worlds[0]).id));
  }

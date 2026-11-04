@@ -11,7 +11,8 @@ function nation(){return D.sources[prefs.nation]||D.sources.en}
 function stage(){return nation().stages.find(x=>x.id===prefs.stage)||nation().stages[0]}
 function storePrefs(){set(prefsKey,prefs)}
 function tier(){return stage().tier}
-function scope(){return E.keyFor('Me',prefs.nation,prefs.stage)}
+function learner(){try{return localStorage.getItem('speedy-player')||'Me'}catch{return 'Me'}}
+function scope(){return E.keyFor(learner(),prefs.nation,prefs.stage)}
 function records(){return E.readStore(completed,scope(),D.quests)}
 function answers(){let name='Me';try{name=localStorage.getItem('speedy-player')||'Me'}catch{}return val('speedy-log|'+name,[])}
 function updateNation(){const n=$('nation');n.replaceChildren();for(const [code,item] of Object.entries(D.sources)){const option=new Option(item.label,code);n.add(option)}n.value=prefs.nation in D.sources?prefs.nation:'en';prefs.nation=n.value;updateStages()}

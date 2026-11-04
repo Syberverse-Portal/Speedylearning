@@ -426,7 +426,7 @@
 <link rel="stylesheet" href="/maths-workspace.css">
 <script src="/maths-methods.js" defer></script>
 <script src="/maths-workspace.js" defer></script>
-<link rel="stylesheet" href="/assets/speedy-world.css"><link rel="stylesheet" href="/assets/speedy-modules.css"><link rel="stylesheet" href="/assets/speedy-journey.css"><link rel="stylesheet" href="/assets/speedy-polish.css"><script src="/assets/speedy-mobile-nav.js" defer></script><script src="/assets/speedy-world.js" defer></script><script src="/assets/speedy-journey.js" defer></script>
+<link rel="stylesheet" href="/assets/speedy-world.css"><link rel="stylesheet" href="/assets/speedy-modules.css"><link rel="stylesheet" href="/assets/speedy-journey.css"><link rel="stylesheet" href="/assets/speedy-polish.css"><link rel="stylesheet" href="/assets/speedy-profiles.css"><script src="/assets/speedy-mobile-nav.js" defer></script><script src="/assets/speedy-world.js" defer></script><script src="/assets/speedy-profiles.js" defer></script><script src="/assets/speedy-journey.js" defer></script>
 </head>
 <body>
 <button class="mute" id="mute" type="button" aria-label="Sound effects on or off">🔊</button>
@@ -2343,12 +2343,13 @@ function renderHome() {
       <button class="hero tables" id="goTables" type="button"><span class="hIcon">✖️</span><b>Times Tables Trainer</b><small>Practise or beat the clock</small></button>
     </div>`;
   $("goMission").onclick = startMission; $("goGarden").onclick = showGarden; $("goTables").onclick = showTables; $("yearChip").onclick = pickYear;
-  if (!y) setTimeout(pickYear, 300);
+  // While the homepage invites a grown-up to set up a learner profile (which asks for the year too), don't pop up a second question
+  if (!y) { const askYear = () => { if (childYear() || (window.SpeedyProfiles && SpeedyProfiles.welcoming())) return; pickYear(); }; if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(askYear, 300)); else setTimeout(askYear, 300); }
 }
 function pickYear() {
   const box = $("yearPick"); box.hidden = false;
   box.innerHTML = `<div class="box"><h2>🎒 Which year are you in?</h2><p>The game will show you the right questions for your year.</p><div class="yearGrid">${YEARS.map(y => `<button class="btn ${childYear() === y ? "" : "ghost"}" data-y="${y}" type="button">${y}</button>`).join("")}</div><button class="btn ghost" id="yearLater" type="button">Not now</button></div>`;
-  box.querySelectorAll("[data-y]").forEach(b => b.onclick = () => { store.set(yearKey(), b.dataset.y); box.hidden = true; try { const j = JSON.parse(localStorage.getItem("speedy-island-journey-v1") || "{}"); j.year = b.dataset.y; localStorage.setItem("speedy-island-journey-v1", JSON.stringify(j)); const sel = document.getElementById("sjYear"); if (sel) { sel.value = b.dataset.y; sel.dispatchEvent(new Event("change")); } } catch (e) {} toast(`🎒 Set to ${b.dataset.y}`); showSubjects(); });
+  box.querySelectorAll("[data-y]").forEach(b => b.onclick = () => { store.set(yearKey(), b.dataset.y); box.hidden = true; try { const jk = "speedy-island-journey-v1|" + player, j = JSON.parse(localStorage.getItem(jk) || "{}"); j.year = b.dataset.y; localStorage.setItem(jk, JSON.stringify(j)); const sel = document.getElementById("sjYear"); if (sel) { sel.value = b.dataset.y; sel.dispatchEvent(new Event("change")); } } catch (e) {} toast(`🎒 Set to ${b.dataset.y}`); showSubjects(); });
   $("yearLater").onclick = () => { box.hidden = true; if (!childYear()) store.set(yearKey(), ""); };
 }
 
@@ -2408,7 +2409,7 @@ function showProgress() {
   const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
   const p = $("progress");
   p.innerHTML = `
-    <div class="panel"><h2>👤 Who's playing?</h2><div class="who" id="who">${players.map(n => `<button class="kid ${n === player ? "on" : ""}" type="button" data-name="${esc(n)}">${esc(n)}</button>`).join("")}<input id="newKid" placeholder="Add a name" maxlength="20"><button class="btn" id="addKid" type="button">Add</button></div></div>
+    <div class="panel"><h2>👤 Who's playing?</h2><div class="who" id="who">${players.map(n => `<button class="kid ${n === player ? "on" : ""}" type="button" data-name="${esc(n)}">${window.SpeedyProfiles ? `<img class="kidFace" src="${SpeedyProfiles.face(SpeedyProfiles.profile(n).buddy)}" alt="">` : ""}${esc(n)}</button>`).join("")}${window.SpeedyProfiles ? `<button class="btn" id="addKid" type="button">＋ Add a learner</button>` : `<input id="newKid" placeholder="Add a name" maxlength="20"><button class="btn" id="addKid" type="button">Add</button>`}</div>${window.SpeedyProfiles ? `<p class="whoNote">🔒 No email or password needed. Each child's profile is saved only on this device. <button class="linkBtn" id="editKids" type="button">Edit profiles</button></p>` : ""}</div>
     <div class="panel"><h2>⭐ ${player === "Me" ? "My" : esc(player) + "'s"} scores</h2><div class="stats">
       <div class="stat"><b>${total}</b><span>questions answered</span></div><div class="stat"><b>${pct}%</b><span>right overall</span></div>
       <div class="stat"><b>${streakN}🔥</b><span>day streak</span></div><div class="stat"><b>${todayN}</b><span>answered today</span></div>
@@ -2423,9 +2424,10 @@ function showProgress() {
     <div class="panel"><h2>🕑 Recent answers</h2>${log.length ? `<ul class="recent">${log.slice(-10).reverse().map(x => `<li>${x.ok ? "✅" : "❌"} ${esc(x.q.replace(/\n/g, " "))} <small>(${esc((SUBJECTS[x.s] || {title: x.s}).title)})</small></li>`).join("")}</ul>` : "<p>Nothing yet. Let's play!</p>"}
       <p><button class="btn ghost" id="resetKid" type="button">Start ${esc(player)}'s progress again</button> <span id="resetMsg"></span></p></div>`;
   p.hidden = false;
-  p.querySelectorAll(".kid").forEach(b => b.onclick = () => { player = b.dataset.name; store.set("speedy-player", player); showProgress(); });
-  $("addKid").onclick = () => { const n = $("newKid").value.trim().slice(0, 20); if (!n || players.includes(n)) return; players.push(n); saveJSON("speedy-players", players); player = n; store.set("speedy-player", player); showProgress(); };
-  $("newKid").onkeydown = e => { if (e.key === "Enter") $("addKid").click(); };
+  p.querySelectorAll(".kid").forEach(b => b.onclick = () => { if (b.dataset.name === player) return; if (window.SpeedyProfiles) return SpeedyProfiles.switchTo(b.dataset.name, "#progress"); player = b.dataset.name; store.set("speedy-player", player); showProgress(); });
+  if (window.SpeedyProfiles) { $("addKid").onclick = () => SpeedyProfiles.open("add", {returnHash: "#progress"}); $("editKids").onclick = () => SpeedyProfiles.open("manage", {returnHash: "#progress"}); }
+  else { $("addKid").onclick = () => { const n = $("newKid").value.trim().replace(/\|/g, "").slice(0, 20); if (!n || players.includes(n)) return; players.push(n); saveJSON("speedy-players", players); player = n; store.set("speedy-player", player); showProgress(); };
+  $("newKid").onkeydown = e => { if (e.key === "Enter") $("addKid").click(); }; }
   if ($("practise")) $("practise").onclick = () => { const m = loadJSON(missKey(), {}); const cards = Object.values(m).map(x => ({...x.card, subj: x.s, tag: "Practise my mistakes · " + ((SUBJECTS[x.s] || {}).title || "")})); subject = Object.values(m)[0].s; deckName = ""; $("progress").hidden = true; $("writing").hidden = true; $("parents").hidden = true; $("homeHub").hidden = true; $("garden").hidden = true; $("tables").hidden = true; begin(cards.slice(-30)); };
   let armed = false;
   $("resetKid").onclick = () => { if (!armed) { armed = true; $("resetMsg").textContent = "Press again to confirm."; return; } store.set(logKey(), "[]"); store.set(missKey(), "{}"); store.set(dayKey(), "[]"); store.set(doneKey(), "[]"); store.set(`speedy-books|${player}`, "[]"); showProgress(); };
