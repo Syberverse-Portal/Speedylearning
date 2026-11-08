@@ -29,6 +29,7 @@ const publicFiles = [
   "assets/speedy-mobile-nav.js",
   "assets/speedy-profiles.js",
   "assets/speedy-profiles.css",
+  "assets/speedy-tracker.css",
   "assets/hero-characters-clean.webp",
   "assets/hero-islands-clean.webp",
   "assets/mascot-maths-clean.webp",

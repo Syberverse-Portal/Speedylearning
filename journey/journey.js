@@ -2,7 +2,11 @@
    Progress stays on this browser. No child names, account or analytics are required. */
 (() => {
   "use strict";
-  const KEY = "speedylearning-adventure-v1";
+  // Each learner has their own Learning Journey. Progress saved before logins existed goes to the first learner who opens it.
+  const LEGACY = "speedylearning-adventure-v1";
+  let who = "Me"; try { who = localStorage.getItem("speedy-player") || "Me"; } catch (e) {}
+  const KEY = LEGACY + "|" + who;
+  try { if (localStorage.getItem(KEY) === null && !localStorage.getItem(LEGACY + "-claimed")) { const old = localStorage.getItem(LEGACY); if (old) { localStorage.setItem(KEY, old); localStorage.setItem(LEGACY + "-claimed", who); } } } catch (e) {}
   const YEARS = ["Reception","Year 1","Year 2","Year 3","Year 4","Year 5","Year 6"];
   const HEROES = [
     {id:"dash",name:"Dash",tag:"Brave explorer",color:"#3186e9"},

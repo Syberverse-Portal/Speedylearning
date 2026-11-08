@@ -1,3 +1,15 @@
+# Learner logins — November 2026
+
+`wrangler.jsonc` adds a second SQLite-backed Durable Object, `LEARNERS` → `LearnerAccount` (one object per child's login, created in the EU jurisdiction), and a `LOGIN_LIMITER` rate-limit binding (40 login attempts per minute per network address). `npx wrangler deploy` provisions both; no secrets or databases need creating.
+
+How to check after deploying:
+1. `/api/worker-health` should include `"learnerLogins":true` and `"loginRateLimit":true`.
+2. On the homepage, *Make a login* → username → buddy and year → PIN twice should finish on the "You're all set" card with a recovery code.
+3. Log in with the same username and PIN in another browser: the chip should say "Learning as …" and progress should match.
+4. If logins show "Logins aren't working right now", check Workers & Pages → speedylearning → Logs for "Learner account error".
+
+---
+
 # Visitor console storage — 18 October 2026
 
 The live console had shown dashes because the Cloudflare Worker was deployed with **no D1 binding**, so `/api/public-visit-summary` returned HTTP 503.

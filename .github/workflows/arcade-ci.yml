@@ -16,6 +16,13 @@ on:
       - assets/speedy-journey.js
       - quests/**
       - tests/profiles-browser.cjs
+      - tests/learner-api.test.mjs
+      - tests/harness/**
+      - serverlib/**
+      - _worker.js
+      - wrangler.jsonc
+      - journey/**
+      - assets/speedy-tracker.css
   pull_request:
     branches:
       - main
@@ -58,6 +65,11 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Learner login API (real Worker code, local SQLite storage)
+        run: node --test tests/learner-api.test.mjs
       - name: Install free browser-test dependencies
         run: |
           npm install --no-save playwright
@@ -66,12 +78,12 @@ jobs:
         run: node scripts/build-static.mjs
       - name: Browser-play on desktop and touch mobile
         run: |
-          python3 -m http.server 8765 --directory dist > /tmp/nova-server.log 2>&1 &
-          sleep 2
+          node tests/harness/worker-harness.mjs 8765 > /tmp/nova-server.log 2>&1 &
+          sleep 3
           node tests/nova-browser.cjs
       - name: Render redesigned homepage, quests and dashboard
         run: node tests/speedy-preview.cjs
-      - name: Learner profiles (no email, one per child, saved on device)
+      - name: Logins (username + PIN, no email), syncing between devices, grown-up tools
         run: node tests/profiles-browser.cjs
       - name: Keep redesigned page screenshots
         uses: actions/upload-artifact@v4

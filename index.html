@@ -426,7 +426,7 @@
 <link rel="stylesheet" href="/maths-workspace.css">
 <script src="/maths-methods.js" defer></script>
 <script src="/maths-workspace.js" defer></script>
-<link rel="stylesheet" href="/assets/speedy-world.css"><link rel="stylesheet" href="/assets/speedy-modules.css"><link rel="stylesheet" href="/assets/speedy-journey.css"><link rel="stylesheet" href="/assets/speedy-polish.css"><link rel="stylesheet" href="/assets/speedy-profiles.css"><script src="/assets/speedy-mobile-nav.js" defer></script><script src="/assets/speedy-world.js" defer></script><script src="/assets/speedy-profiles.js" defer></script><script src="/assets/speedy-journey.js" defer></script>
+<link rel="stylesheet" href="/assets/speedy-world.css"><link rel="stylesheet" href="/assets/speedy-modules.css"><link rel="stylesheet" href="/assets/speedy-journey.css"><link rel="stylesheet" href="/assets/speedy-polish.css"><link rel="stylesheet" href="/assets/speedy-profiles.css"><link rel="stylesheet" href="/assets/speedy-tracker.css"><script src="/assets/speedy-mobile-nav.js" defer></script><script src="/assets/speedy-world.js" defer></script><script src="/assets/speedy-profiles.js" defer></script><script src="/assets/speedy-journey.js" defer></script>
 </head>
 <body>
 <button class="mute" id="mute" type="button" aria-label="Sound effects on or off">🔊</button>
@@ -2399,38 +2399,117 @@ function showProgress() {
   const log = loadJSON(logKey(), []), days = loadJSON(dayKey(), []), miss = loadJSON(missKey(), {}), done = loadJSON(doneKey(), []), booksSeen = loadJSON(`speedy-books|${player}`, []);
   const total = log.length, right = log.filter(x => x.ok).length, pct = total ? Math.round(right / total * 100) : 0;
   const bySubject = {}; for (const x of log) { const b = bySubject[x.s] ||= {n: 0, ok: 0}; b.n++; b.ok += x.ok; }
-  const byTopic = {}; for (const x of log) { const key = `${(SUBJECTS[x.s] || {title: x.s}).title} · ${x.topic || x.d}`; const b = byTopic[key] ||= {n: 0, ok: 0}; b.n++; b.ok += x.ok; }
-  const weak = Object.entries(byTopic).filter(([, b]) => b.n >= 5).map(([k, b]) => [k, Math.round(b.ok / b.n * 100), b.n]).filter(x => x[1] < 80).sort((a, b) => a[1] - b[1]).slice(0, 6);
-  const strong = Object.entries(byTopic).filter(([, b]) => b.n >= 5).map(([k, b]) => [k, Math.round(b.ok / b.n * 100)]).sort((a, b) => b[1] - a[1]).slice(0, 3);
-  const bests = store.keys().filter(key => key && key.startsWith("speedy-best|"));
-  const streakN = streakDays(days), todayN = log.filter(x => new Date(x.t).toISOString().slice(0, 10) === today()).length;
-  const BADGES = [["🌱", "First answer", total >= 1], ["⭐", "50 answers", total >= 50], ["🌟", "500 answers", total >= 500], ["🏆", "2,000 answers", total >= 2000], ["🔥", "3-day streak", streakN >= 3], ["🚀", "7-day streak", streakN >= 7], ["🎯", "90% in a subject (20+ answers)", Object.values(bySubject).some(b => b.n >= 20 && b.ok / b.n >= .9)], ["🗺️", "Tried 8 subjects", Object.keys(bySubject).length >= 8], ["🎓", "Did a SATs test", !!bySubject.sats], ["🧹", "Cleared all mistakes", total >= 20 && !Object.keys(miss).length], ["📖", "Finished a story", done.some(x => /^Story Time/.test(x.what))], ["🖊️", "Did a writing task", done.some(x => /^Writing/.test(x.what))], ["🏁", "Finished 10 sections", done.length >= 10]];
-  const week = Array.from({length: 7}, (_, k) => { const d = new Date(); d.setDate(d.getDate() - 6 + k); const key = d.toISOString().slice(0, 10); return [d.toLocaleDateString("en-GB", {weekday: "short"}), log.filter(x => new Date(x.t).toISOString().slice(0, 10) === key).length]; });
-  const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const byTopic = {}; for (const x of log) { const t = x.topic || x.d; if (!t) continue; const b = byTopic[x.s + "|" + t] ||= {s: x.s, topic: t, n: 0, ok: 0}; b.n++; b.ok += x.ok; }
+  const rate = b => Math.round(b.ok / b.n * 100);
+  const weak = Object.values(byTopic).filter(b => b.n >= 5 && b.ok / b.n < .8).sort((a, b) => a.ok / a.n - b.ok / b.n).slice(0, 6);
+  const strong = Object.values(byTopic).filter(b => b.n >= 5).sort((a, b) => b.ok / b.n - a.ok / a.n).slice(0, 3);
+  const streakN = streakDays(days), todayN = log.filter(x => new Date(x.t).toISOString().slice(0, 10) === today()).length, missN = Object.keys(miss).length;
+    const BADGES = [["🌱", "First answer", total >= 1], ["⭐", "50 answers", total >= 50], ["🌟", "500 answers", total >= 500], ["🏆", "2,000 answers", total >= 2000], ["🔥", "3-day streak", streakN >= 3], ["🚀", "7-day streak", streakN >= 7], ["🎯", "90% in a subject (20+ answers)", Object.values(bySubject).some(b => b.n >= 20 && b.ok / b.n >= .9)], ["🗺️", "Tried 8 subjects", Object.keys(bySubject).length >= 8], ["🎓", "Did a SATs test", !!bySubject.sats], ["🧹", "Cleared all mistakes", total >= 20 && !Object.keys(miss).length], ["📖", "Finished a story", done.some(x => /^Story Time/.test(x.what))], ["🖊️", "Did a writing task", done.some(x => /^Writing/.test(x.what))], ["🏁", "Finished 10 sections", done.length >= 10]];
+  const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  const subj = s => SUBJECTS[s] || {title: String(s).replace(/^./, c => c.toUpperCase()), icon: "📘"};
+  const topicName = b => `${subj(b.s).title} · ${b.topic}`;
+  // Levels: each one needs a few more right answers than the last (10, 30, 60, 100, 150…)
+  let level = 1; while (right >= 5 * (level + 1) * level) level++;
+  const lvFrom = 5 * level * (level - 1), lvTo = 5 * (level + 1) * level, lvPct = Math.round((right - lvFrom) / (lvTo - lvFrom) * 100);
+  const rank = [[20, "Legend"], [15, "Champion"], [10, "Super Star"], [7, "Star Learner"], [5, "Adventurer"], [3, "Explorer"], [1, "Rookie"]].find(([n]) => level >= n)[1];
+  const GOAL = 20, goalPct = Math.min(100, Math.round(todayN / GOAL * 100));
+  const prof = window.SpeedyProfiles ? SpeedyProfiles.profile(player) : {buddy: "dash", account: false};
+  const face = window.SpeedyProfiles ? SpeedyProfiles.face(prof.buddy) : "/assets/mascot-dash.svg";
+  const guest = !prof.account;
+  const week = Array.from({length: 7}, (_, k) => { const d = new Date(); d.setDate(d.getDate() - 6 + k); const key = d.toISOString().slice(0, 10); return {label: k === 6 ? "Today" : d.toLocaleDateString("en-GB", {weekday: "short"}), played: days.includes(key) || log.some(x => new Date(x.t).toISOString().slice(0, 10) === key), today: k === 6}; });
+  const earned = BADGES.filter(b => b[2]);
+  const goals = [[50, "⭐", "50 answers", total], [500, "🌟", "500 answers", total], [2000, "🏆", "2,000 answers", total], [3, "🔥", "3-day streak", streakN], [7, "🚀", "7-day streak", streakN], [10, "🏁", "Finished 10 sections", done.length]]
+    .filter(g => g[3] < g[0]).sort((a, b) => b[3] / b[0] - a[3] / a[0]);
+  const nextBadge = goals[0];
+  const TRY = ["maths", "spelling", "stories", "science", "grammar", "animals", "flags", "geography", "history"].filter(s => SUBJECTS[s] && !bySubject[s]);
+  const step = !total ? {icon: "🚀", title: "Start Today's Mission", text: "A few quick questions picked just for you.", btn: "Let's go!", act: "mission"}
+    : missN ? {icon: "🔁", title: `Fix ${missN} tricky question${missN === 1 ? "" : "s"}`, text: "Get each one right twice and it disappears from this list.", btn: "Practise now", act: "practise"}
+    : weak[0] ? {icon: "💪", title: `Practise ${topicName(weak[0])}`, text: `You've got ${rate(weak[0])}% right so far. A bit more practice will make it easier!`, btn: "Practise", act: "subject:" + weak[0].s}
+    : todayN < GOAL ? {icon: "🚀", title: "Do Today's Mission", text: `${GOAL - todayN} more answers to reach today's goal.`, btn: "Let's go!", act: "mission"}
+    : TRY[0] ? {icon: "🧭", title: `Try ${subj(TRY[0]).title}`, text: "You've smashed today's goal. Fancy something new?", btn: "Explore", act: "subject:" + TRY[0]}
+    : {icon: "🎉", title: "Brilliant work today!", text: "You've reached today's goal. Come back tomorrow to keep your streak going.", btn: "Play more", act: "home"};
+  const stars = b => b.n < 5 ? 0 : b.ok / b.n >= .9 ? 3 : b.ok / b.n >= .75 ? 2 : 1;
+  const starWord = ["Just started", "Keep practising", "Doing well", "Super star!"];
+  const subjects = Object.entries(bySubject).sort((a, b) => b[1].n - a[1].n);
   const p = $("progress");
-  p.innerHTML = `
-    <div class="panel"><h2>👤 Who's playing?</h2><div class="who" id="who">${players.map(n => `<button class="kid ${n === player ? "on" : ""}" type="button" data-name="${esc(n)}">${window.SpeedyProfiles ? `<img class="kidFace" src="${SpeedyProfiles.face(SpeedyProfiles.profile(n).buddy)}" alt="">` : ""}${esc(n)}</button>`).join("")}${window.SpeedyProfiles ? `<button class="btn" id="addKid" type="button">＋ Add a learner</button>` : `<input id="newKid" placeholder="Add a name" maxlength="20"><button class="btn" id="addKid" type="button">Add</button>`}</div>${window.SpeedyProfiles ? `<p class="whoNote">🔒 No email or password needed. Each child's profile is saved only on this device. <button class="linkBtn" id="editKids" type="button">Edit profiles</button></p>` : ""}</div>
-    <div class="panel"><h2>⭐ ${player === "Me" ? "My" : esc(player) + "'s"} scores</h2><div class="stats">
-      <div class="stat"><b>${total}</b><span>questions answered</span></div><div class="stat"><b>${pct}%</b><span>right overall</span></div>
-      <div class="stat"><b>${streakN}🔥</b><span>day streak</span></div><div class="stat"><b>${todayN}</b><span>answered today</span></div>
-      <div class="stat"><b>${Object.keys(miss).length}</b><span>to practise</span></div><div class="stat"><b>${done.length}</b><span>sections finished</span></div><div class="stat"><b>${booksSeen.length}</b><span>books explored</span></div></div></div>
-    ${!canStore ? `<div class="panel warn"><b>⚠️ This browser isn't saving progress.</b> Progress is kept while this page is open, but will be lost when it's closed. Open the game in a normal browser window (not a private window or preview) to keep it.</div>` : ""}
-    <div class="panel"><h2>🏁 Finished sections</h2>${done.length ? `<ul class="recent">${done.slice(-12).reverse().map(x => `<li>${"⭐".repeat(x.stars || 0)}${"☆".repeat(3 - (x.stars || 0))} <b>${esc(x.what)}</b> · ${esc(x.detail)} <small>${new Date(x.t).toLocaleDateString("en-GB", {day: "numeric", month: "short"})}</small></li>`).join("")}</ul>` : "<p>When you finish a quiz, maths or spelling deck, a story, a writing task or a SATs paper, it appears here with your stars.</p>"}</div>
-    <div class="panel"><h2>🔁 Practise my mistakes</h2><p>${Object.keys(miss).length ? `There are ${Object.keys(miss).length} questions to try again. Each one stays here until it's been answered right twice.` : "No mistakes to practise. Brilliant!"}</p>${Object.keys(miss).length ? `<button class="btn" id="practise" type="button">Practise now</button>` : ""}</div>
-    <div class="panel"><h2>📅 This week</h2><div class="week">${week.map(([d, n]) => `<div class="day"><i class="${n ? "on" : ""}">${n || ""}</i>${d}</div>`).join("")}</div></div>
-    <div class="panel"><h2>📚 Subjects</h2>${Object.keys(bySubject).length ? `<div class="bars">${Object.entries(bySubject).sort((a, b) => b[1].n - a[1].n).map(([s, b], k) => { const v = Math.round(b.ok / b.n * 100); return `<div class="barRow"><span>${esc((SUBJECTS[s] || {title: s}).title)}</span><div class="track" title="${b.ok} of ${b.n} right"><div class="fill" style="width:${v}%;background:${SUBJECT_COLOURS[k % 8]}"></div></div><span class="pct">${v}%</span></div>`; }).join("")}</div>` : "<p>Play any quiz, maths, spelling or SATs deck and your scores appear here.</p>"}</div>
-    <div class="panel"><h2>💪 Topics to work on</h2>${weak.length ? `<ol class="weak">${weak.map(([k, v, n]) => `<li>${esc(k)}: <b>${v}%</b> (${n} answers)</li>`).join("")}</ol>` : (Object.values(byTopic).some(b => b.n >= 5) ? "<p>Nothing to worry about: every topic you've tried is 80% or better. 🎉</p>" : "<p>Answer at least 5 questions in a topic to see which ones need more practice.</p>")}${strong.length ? `<p>🌟 Best topics: ${strong.map(([k, v]) => `${esc(k)} (${v}%)`).join(", ")}</p>` : ""}</div>
-    <div class="panel"><h2>🏅 Badges</h2><div class="badges">${BADGES.map(([i, t, on]) => `<span class="badge ${on ? "" : "off"}" title="${esc(t)}">${i} ${esc(t)}</span>`).join("")}</div></div>
-    <div class="panel"><h2>🕑 Recent answers</h2>${log.length ? `<ul class="recent">${log.slice(-10).reverse().map(x => `<li>${x.ok ? "✅" : "❌"} ${esc(x.q.replace(/\n/g, " "))} <small>(${esc((SUBJECTS[x.s] || {title: x.s}).title)})</small></li>`).join("")}</ul>` : "<p>Nothing yet. Let's play!</p>"}
-      <p><button class="btn ghost" id="resetKid" type="button">Start ${esc(player)}'s progress again</button> <span id="resetMsg"></span></p></div>`;
+  p.innerHTML = `<div class="trk">
+    <section class="trk-hero">
+      <img class="trk-face" src="${face}" alt="">
+      <div class="trk-hello">
+        <h2>${guest ? "Hi there!" : `Hi ${esc(player)}!`}</h2>
+        <p class="trk-level"><span class="trk-badge">Level ${level}</span> <b>${rank}</b></p>
+        <div class="trk-bar" role="progressbar" aria-label="Progress to level ${level + 1}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${lvPct}"><i style="width:${Math.max(4, lvPct)}%"></i></div>
+        <p class="trk-small">${lvTo - right} more right answer${lvTo - right === 1 ? "" : "s"} to reach Level ${level + 1}</p>
+      </div>
+      ${window.SpeedyProfiles ? `<button class="trk-switch" type="button" data-act="switch">${guest ? "🔑 Log in" : "🔄 Switch learner"}</button>` : ""}
+    </section>
+    ${guest && window.SpeedyProfiles ? `<section class="trk-note"><p>💾 <b>Make a login to keep this progress safe</b> and carry on on any device. Just a username and a 4-number PIN, no email.</p><button class="trk-go small" type="button" data-act="signup">Make a login</button></section>` : ""}
+    ${!canStore ? `<section class="trk-note warn"><p><b>⚠️ This browser isn't saving progress.</b> It's kept while this page is open, but will be lost when it's closed. Open SpeedyLearning in a normal browser window (not a private window) to keep it.</p></section>` : ""}
+    <div class="trk-today">
+      <section class="trk-tile">
+        <div class="trk-ring" style="--p:${goalPct}" role="img" aria-label="${todayN} of ${GOAL} answers today"><b>${todayN}</b><small>of ${GOAL}</small></div>
+        <div><h3>Today's goal</h3><p>${todayN >= GOAL ? "Goal reached! 🎉" : `${GOAL - todayN} more answer${GOAL - todayN === 1 ? "" : "s"} to go`}</p></div>
+      </section>
+      <section class="trk-tile">
+        <div class="trk-big">🔥<b>${streakN}</b></div>
+        <div><h3>${streakN === 1 ? "1 day" : `${streakN} days`} in a row</h3><p>${week[6].played ? "You've played today. Keep it up!" : streakN ? "Play today to keep your streak!" : "Play today to start a streak!"}</p></div>
+      </section>
+      <section class="trk-tile">
+        <div class="trk-big">⭐<b>${right.toLocaleString("en-GB")}</b></div>
+        <div><h3>Right answers</h3><p>${total ? `${pct}% right overall` : "Answer questions to collect stars"}</p></div>
+      </section>
+    </div>
+    <section class="trk-card">
+      <h3>📅 This week</h3>
+      <ol class="trk-week">${week.map(d => `<li class="${d.played ? "on" : ""} ${d.today ? "today" : ""}"><span aria-hidden="true">${d.played ? "⭐" : ""}</span><small>${d.label}</small><em class="sr">${d.played ? "played" : "not played"}</em></li>`).join("")}</ol>
+    </section>
+    <section class="trk-next">
+      <div class="trk-next-icon" aria-hidden="true">${step.icon}</div>
+      <div><p class="trk-eyebrow">Your next step</p><h3>${esc(step.title)}</h3><p>${esc(step.text)}</p></div>
+      <button class="trk-go" type="button" data-act="${step.act}">${step.btn} ➜</button>
+    </section>
+    <section class="trk-card">
+      <h3>📚 My subjects</h3>
+      ${subjects.length ? `<div class="trk-subjects">${subjects.map(([s, b]) => { const n = stars(b); return `<button class="trk-subject" type="button" data-act="subject:${esc(s)}"><span class="trk-subject-icon" aria-hidden="true">${subj(s).icon || "📘"}</span><b>${esc(subj(s).title)}</b><span class="trk-stars" aria-label="${n} of 3 stars">${"★".repeat(n)}<i>${"★".repeat(3 - n)}</i></span><small>${starWord[n]} · ${b.n} answer${b.n === 1 ? "" : "s"}</small><span class="trk-mini"><i style="width:${rate(b)}%"></i></span><span class="trk-play">Practise ➜</span></button>`; }).join("")}</div>` : `<p>Play any subject and it will appear here with your stars.</p>`}
+      ${TRY.length && subjects.length ? `<p class="trk-try">Not tried yet: ${TRY.slice(0, 3).map(s => `<button class="trk-chip" type="button" data-act="subject:${s}">${subj(s).icon} ${esc(subj(s).title)}</button>`).join(" ")}</p>` : ""}
+    </section>
+    <section class="trk-card">
+      <h3>🏅 Badges <small>${earned.length} of ${BADGES.length}</small></h3>
+      ${nextBadge ? `<div class="trk-nextbadge"><span class="trk-nb-icon" aria-hidden="true">${nextBadge[1]}</span><div><b>Next badge: ${nextBadge[2]}</b><div class="trk-mini big"><i style="width:${Math.round(nextBadge[3] / nextBadge[0] * 100)}%"></i></div><small>${(nextBadge[0] - nextBadge[3]).toLocaleString("en-GB")} more to go</small></div></div>` : ""}
+      <div class="trk-badges">${BADGES.map(([i, t, on]) => `<span class="trk-b ${on ? "on" : ""}" title="${esc(t)}"><span aria-hidden="true">${on ? i : "🔒"}</span>${esc(t)}<em class="sr">${on ? " (earned)" : " (not yet)"}</em></span>`).join("")}</div>
+    </section>
+    ${done.length ? `<section class="trk-card"><h3>🏁 Finished recently</h3><ul class="trk-done">${done.slice(-5).reverse().map(x => `<li><span class="trk-stars" aria-label="${x.stars || 0} of 3 stars">${"★".repeat(x.stars || 0)}<i>${"★".repeat(3 - (x.stars || 0))}</i></span> <b>${esc(x.what)}</b> <small>${esc(x.detail)} · ${new Date(x.t).toLocaleDateString("en-GB", {day: "numeric", month: "short"})}</small></li>`).join("")}</ul></section>` : ""}
+    <details class="trk-grown">
+      <summary>For grown-ups: detailed report</summary>
+      <div class="trk-grown-body">
+        <div class="trk-stats"><span><b>${total.toLocaleString("en-GB")}</b> questions answered</span><span><b>${pct}%</b> right overall</span><span><b>${missN}</b> to practise</span><span><b>${done.length}</b> sections finished</span><span><b>${booksSeen.length}</b> books explored</span><span><b>${earned.length}</b> badges</span></div>
+        ${subjects.length ? `<h4>Subjects</h4><table class="trk-table"><thead><tr><th scope="col">Subject</th><th scope="col">Answers</th><th scope="col">Right</th></tr></thead><tbody>${subjects.map(([s, b]) => `<tr><td>${esc(subj(s).title)}</td><td>${b.n}</td><td>${rate(b)}%</td></tr>`).join("")}</tbody></table>` : ""}
+        <h4>Topics to work on</h4>${weak.length ? `<ol>${weak.map(b => `<li>${esc(topicName(b))}: <b>${rate(b)}%</b> (${b.n} answers)</li>`).join("")}</ol>` : `<p>${Object.values(byTopic).some(b => b.n >= 5) ? "Nothing to worry about: every topic tried is 80% or better. 🎉" : "Answer at least 5 questions in a topic to see which ones need more practice."}</p>`}
+        ${strong.length ? `<p>🌟 Best topics: ${strong.map(b => `${esc(topicName(b))} (${rate(b)}%)`).join(", ")}</p>` : ""}
+        <h4>Recent answers</h4>${log.length ? `<ul class="trk-recent">${log.slice(-10).reverse().map(x => `<li>${x.ok ? "✅" : "❌"} ${esc(String(x.q || "").replace(/\n/g, " "))} <small>(${esc(subj(x.s).title)})</small></li>`).join("")}</ul>` : "<p>Nothing yet.</p>"}
+        <p class="trk-reset"><button class="btn ghost" id="resetKid" type="button">Start ${guest ? "this device's" : esc(player) + "'s"} progress again</button> <span id="resetMsg" role="status"></span></p>
+      </div>
+    </details>
+  </div>`;
   p.hidden = false;
-  p.querySelectorAll(".kid").forEach(b => b.onclick = () => { if (b.dataset.name === player) return; if (window.SpeedyProfiles) return SpeedyProfiles.switchTo(b.dataset.name, "#progress"); player = b.dataset.name; store.set("speedy-player", player); showProgress(); });
-  if (window.SpeedyProfiles) { $("addKid").onclick = () => SpeedyProfiles.open("add", {returnHash: "#progress"}); $("editKids").onclick = () => SpeedyProfiles.open("manage", {returnHash: "#progress"}); }
-  else { $("addKid").onclick = () => { const n = $("newKid").value.trim().replace(/\|/g, "").slice(0, 20); if (!n || players.includes(n)) return; players.push(n); saveJSON("speedy-players", players); player = n; store.set("speedy-player", player); showProgress(); };
-  $("newKid").onkeydown = e => { if (e.key === "Enter") $("addKid").click(); }; }
-  if ($("practise")) $("practise").onclick = () => { const m = loadJSON(missKey(), {}); const cards = Object.values(m).map(x => ({...x.card, subj: x.s, tag: "Practise my mistakes · " + ((SUBJECTS[x.s] || {}).title || "")})); subject = Object.values(m)[0].s; deckName = ""; $("progress").hidden = true; $("writing").hidden = true; $("parents").hidden = true; $("homeHub").hidden = true; $("garden").hidden = true; $("tables").hidden = true; begin(cards.slice(-30)); };
+  const hideAll = () => { $("progress").hidden = true; $("writing").hidden = true; $("parents").hidden = true; $("homeHub").hidden = true; $("garden").hidden = true; $("tables").hidden = true; };
+  const act = a => {
+    if (a === "switch") return window.SpeedyProfiles && SpeedyProfiles.open(guest ? "pick" : "pick", {returnHash: "#progress"});
+    if (a === "signup") return window.SpeedyProfiles && SpeedyProfiles.open("signup", {returnHash: "#progress"});
+    if (a === "home") return showSubjects();
+    if (a === "mission") { hideAll(); return startMission(); }
+    if (a === "practise") { const m = loadJSON(missKey(), {}); const cards = Object.values(m).map(x => ({...x.card, subj: x.s, tag: "Practise my mistakes · " + ((SUBJECTS[x.s] || {}).title || "")})); if (!cards.length) return showProgress(); subject = Object.values(m)[0].s; deckName = ""; hideAll(); return begin(cards.slice(-30)); }
+    if (a.startsWith("subject:")) { const s = a.slice(8); window.scrollTo({top: 0}); if (s === "garden") return showGarden(); if (s === "tables") return showTables(); if (s === "mission") { hideAll(); return startMission(); } if (SUBJECTS[s]) return showDecks(s); return showSubjects(); }
+  };
+  p.querySelectorAll("[data-act]").forEach(b => b.onclick = () => act(b.dataset.act));
   let armed = false;
-  $("resetKid").onclick = () => { if (!armed) { armed = true; $("resetMsg").textContent = "Press again to confirm."; return; } store.set(logKey(), "[]"); store.set(missKey(), "{}"); store.set(dayKey(), "[]"); store.set(doneKey(), "[]"); store.set(`speedy-books|${player}`, "[]"); showProgress(); };
+  $("resetKid").onclick = async () => {
+    if (!armed) { armed = true; $("resetMsg").textContent = "This clears answers, streaks and finished sections. Press again to confirm."; return; }
+    $("resetKid").disabled = true;
+    if (window.SpeedyProfiles && SpeedyProfiles.isAccount(player)) { const r = await SpeedyProfiles.resetProgress(player); if (r && r.error) { $("resetKid").disabled = false; armed = false; $("resetMsg").textContent = "Couldn't reach SpeedyLearning to clear the saved copy. Check the internet and try again."; return; } }
+    else { store.set(logKey(), "[]"); store.set(missKey(), "{}"); store.set(dayKey(), "[]"); store.set(doneKey(), "[]"); store.set(`speedy-books|${player}`, "[]"); }
+    showProgress();
+  };
 }
 
 // ---------- Sounds, confetti, streaks and best scores ----------

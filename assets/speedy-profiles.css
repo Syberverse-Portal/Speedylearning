@@ -120,3 +120,69 @@
 .who .kid .kidFace{width:30px;height:30px;object-fit:contain;margin:-5px 0 -5px -6px}
 .whoNote{margin:12px 0 0;font-size:.9rem;font-weight:700;color:#4d6391}
 .whoNote .linkBtn{min-height:36px;padding:4px 2px;border:0;background:none;color:#1d4fc0;font:inherit;font-weight:900;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* ---------- Logins: steps, PIN pad, login card ---------- */
+.sp-chip.is-out{border-color:#ffd24d;background:#fffbe6;box-shadow:0 3px 0 #f3d873}
+.sp-tile.is-local small{color:#a05a00}
+.sp-steps{display:flex;align-items:center;gap:6px;margin:0 0 10px;font-size:.8rem;font-weight:900;color:#566c98}
+.sp-steps i{width:28px;height:8px;border-radius:9px;background:#d6e8fb}
+.sp-steps i.on{background:#2465de}
+.sp-steps span{margin-left:6px}
+.sp-center{text-align:center}
+.sp-center h2{margin-right:0}
+.sp-center .sp-steps{justify-content:center}
+.sp-face-big{display:grid;width:96px;height:96px;margin:0 auto 8px;background:#ffef9b}
+.sp-face-big img{width:88px;height:88px}
+.sp-pin{max-width:330px;margin:4px auto 0}
+.sp-dots{display:flex;justify-content:center;gap:16px;margin:4px 0 6px}
+.sp-dots i{width:22px;height:22px;border-radius:50%;border:3px solid #2465de;background:#fff;transition:background .12s,transform .12s}
+.sp-dots i.on{background:#2465de;transform:scale(1.08)}
+.sp-dots.shake{animation:spShake .4s}
+@keyframes spShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
+.sp-pin-msg{min-height:1.4em;margin:6px 0 8px;text-align:center}
+.sp-keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sp-key{min-height:62px;border:3px solid #d6e8fb;border-radius:20px;background:#fff;color:#142b60;font:800 1.7rem/1 "Baloo 2","Nunito",sans-serif;box-shadow:0 4px 0 #dceafa;cursor:pointer;touch-action:manipulation}
+.sp-key:hover{border-color:#8cc4ff;background:#f6fbff}
+.sp-key:active{transform:translateY(3px);box-shadow:0 1px 0 #dceafa}
+.sp-key-small{font:900 .95rem "Nunito",sans-serif;color:#4d6391}
+.sp-pin.is-busy .sp-key{opacity:.55;pointer-events:none}
+.sp-key:focus-visible{outline:3px solid #ffb21f;outline-offset:2px}
+.sp-row{display:flex;gap:8px;align-items:stretch}
+.sp-row input{flex:1;min-width:0}
+.sp-idea{flex:none;min-height:52px;padding:8px 14px;border:3px solid #ffde67;border-radius:16px;background:#fffbe6;color:#6d4a00;font:900 .9rem "Nunito",sans-serif;cursor:pointer;white-space:nowrap}
+.sp-idea:hover{background:#fff3c4}
+.sp-gap{margin-top:14px}
+.sp-switch{margin:14px 0 0;font-weight:700;color:#4d6391}
+.sp-switch .sp-link{min-height:0;padding:0 2px;font-size:inherit}
+.sp-foot{flex-wrap:wrap;gap:4px 18px}
+.sp-actions-center{justify-content:center}
+.sp-card{margin:14px 0 4px;padding:16px;border:3px dashed #8cc4ff;border-radius:22px;background:#fff;text-align:left}
+.sp-card-user{display:flex;flex-direction:column;align-items:center;margin:0 0 12px;text-align:center}
+.sp-card-user small{font-weight:800;color:#566c98}
+.sp-card-user b{font:800 clamp(1.6rem,6vw,2.2rem)/1.1 "Baloo 2","Nunito",sans-serif;color:#142b60;word-break:break-all}
+.sp-card-code{padding:12px 14px;border-radius:14px;background:#fff6d8;color:#5a3d00;font-size:.9rem}
+.sp-card-code p{margin:0}
+.sp-code{margin-top:8px!important;font:900 clamp(1.15rem,5vw,1.5rem)/1.2 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;letter-spacing:.08em;text-align:center;color:#142b60;user-select:all}
+.sp-who{display:flex;align-items:center;gap:14px;margin:0 44px 8px 0}
+.sp-who h2{margin:0}
+.sp-saved{margin:2px 0 0;font-size:.86rem;font-weight:800;color:#2a7a4f}
+.sp-danger-row{display:flex;flex-wrap:wrap;gap:8px}
+.sp-small{min-height:44px;padding:8px 16px;font-size:.9rem}
+.sp-welcome-actions .sp-link{min-height:52px}
+#spPrintCard{display:none}
+@media print{
+ html.sp-print body>*{display:none!important}
+ html.sp-print body>#spPrintCard{display:block!important;max-width:420px;margin:20px auto;padding:22px;border:3px dashed #2465de;border-radius:20px;font-family:"Nunito",system-ui,sans-serif;color:#000;text-align:center}
+ #spPrintCard img{width:90px;height:90px}
+ #spPrintCard h1{font-size:1.4rem;margin:0 0 8px}
+ #spPrintCard p{font-size:1.05rem;margin:10px 0}
+ #spPrintCard b{font-size:1.25rem}
+ #spPrintCard .sp-print-code b{font-family:monospace;letter-spacing:.08em}
+}
+@media(max-width:520px){
+ .sp-key{min-height:56px}
+ .sp-row{flex-direction:column}
+ .sp-idea{min-height:46px}
+ .sp-dialog{padding-top:22px}
+}
+@media(prefers-reduced-motion:reduce){.sp-dots.shake{animation:none}.sp-dots i{transition:none}}

@@ -1,9 +1,12 @@
 /* SpeedyLearning Cloudflare Worker: anonymous visits with automatic SQLite
  * Durable Object storage (provisioned at deploy time via wrangler.jsonc).
- * No IP addresses, cookies, browser fingerprints, or children's answers saved.
+ * Visits: no IP addresses, cookies, browser fingerprints, or children's answers saved.
+ * Learner logins (username + 4-digit PIN, no email) live in serverlib/learner-accounts.js.
  * An existing D1 binding remains supported as a backwards-compatible fallback.
  */
 import { DurableObject } from "cloudflare:workers";
+import { handleLearnerApi } from "./serverlib/learner-accounts.js";
+export { LearnerAccount } from "./serverlib/learner-accounts.js";
 
 const DAY = 24 * 60 * 60 * 1000;
 const KEEP = 30 * DAY;
@@ -165,9 +168,13 @@ export default {
         worker: true,
         databaseConfigured: Boolean(env.VISIT_COUNTER || env.DB),
         visitStorage: env.VISIT_COUNTER ? "durable-object" : env.DB ? "d1" : "missing",
-        pushConfigured: Boolean(env.VAPID_PUBLIC_KEY && env.VAPID_PRIVATE_KEY)
+        pushConfigured: Boolean(env.VAPID_PUBLIC_KEY && env.VAPID_PRIVATE_KEY),
+        learnerLogins: Boolean(env.LEARNERS),
+        loginRateLimit: Boolean(env.LOGIN_LIMITER)
       });
     }
+
+    if (path.startsWith("/api/learner/")) return handleLearnerApi(request, env, path, sameOrigin);
 
     if (path === "/api/visit") {
       if (request.method !== "POST") return reply({ error: "Method not allowed" }, 405);

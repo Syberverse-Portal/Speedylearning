@@ -18,11 +18,29 @@
       {
         "name": "VISIT_COUNTER",
         "class_name": "VisitCounter"
+      },
+      {
+        "name": "LEARNERS",
+        "class_name": "LearnerAccount"
       }
     ]
   },
+  "ratelimits": [
+    {
+      "name": "LOGIN_LIMITER",
+      "namespace_id": "1101",
+      "simple": {
+        "limit": 40,
+        "period": 60
+      }
+    }
+  ],
   "exports": {
     "VisitCounter": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    },
+    "LearnerAccount": {
       "type": "durable-object",
       "storage": "sqlite"
     }
