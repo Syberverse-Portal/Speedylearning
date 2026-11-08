@@ -112,7 +112,11 @@ async function run(){
       assert.equal(await page.evaluate(()=>SpeedyProfiles.syncNow()),true);
       if(view.n>500)assert.ok(urls.filter(u=>u.endsWith('/api/learner/sync')).length>=3,'big uploads go in small pieces');
       const stored=Object.entries(await page.evaluate(()=>({...localStorage})));
-      assert.ok(!stored.some(([k,v])=>v.includes(view.pin)&&!/^speedy-(log|done)\|/.test(k)),'the PIN itself is never stored on the device');
+      // The PIN never appears on its own in anything saved (random codes and timestamps may contain the same digits inside them)
+      const alone=new RegExp(`(^|[^0-9A-Za-z_-])${view.pin}([^0-9A-Za-z_-]|$)`);
+      assert.ok(!stored.some(([k,v])=>alone.test(v)&&!/^speedy-(log|done)\|/.test(k)),'the PIN itself is never stored on the device');
+      const check=JSON.parse(await LS(page,'speedy-pin|'+view.user));
+      assert.deepEqual(Object.keys(check).sort(),['h','s']);assert.match(check.h,/^[0-9a-f]{64}$/);
       assert.ok(!urls.some(u=>u.includes(view.pin)),'the PIN is never put in a web address');
 
       // A second device: log in with username and PIN and carry on
